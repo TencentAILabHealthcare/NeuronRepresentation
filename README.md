@@ -1,7 +1,7 @@
 # [NeurIPS22] TreeMoCo: Contrastive Neuron Morphology Representation Learning
 
 This repository holds the Pytorch implementation for TreeMoCo described in the paper 
-> [**TreeMoCo: Contrastive Neuron Morphology Representation Learning**](tbd),  
+> [**TreeMoCo: Contrastive Neuron Morphology Representation Learning**](https://openreview.net/forum?id=p6hArCtwLAU),  
 > Hanbo Chen*, Jiawei Yang*, Daniel Maxim Iascone, Lijuan Liu, Lei He, Hanchuan Peng, and Jianhua Yao   
 > advances in Neural Information Processing Systems (NeurIPS), 2022 
 
