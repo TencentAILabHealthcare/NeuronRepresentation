@@ -26,7 +26,8 @@ Abstract
 This repository will hold the code for our neuron representation learning framework, named TreeMoCo. 
 We aim to bring advanced machine learning techniques for learning neuron morphology qualitatively and quantitatively.
 
-More details will be updated after December 15.
+[12/21/2023 update]
+More details will be released in following weeks.
 
 Stay tuned!
 
