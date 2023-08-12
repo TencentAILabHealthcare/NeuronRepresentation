@@ -169,7 +169,7 @@ def split_sample_10fold_cv_and_merge(folder_data):
     merger = MergeRegionHelper()
     random.seed(44)
 
-    df_all = pd.DataFrame()
+    df_list = []
     for fname_csv in flist_csv:
         df = pd.read_csv(fname_csv)
         for rid, row in df.iterrows():
@@ -183,6 +183,7 @@ def split_sample_10fold_cv_and_merge(folder_data):
             df.loc[rid, 'structure__safe_name'] = group
             df.loc[rid, 'structure_merge__acronym'] = merger.get_merged_region_name(row)
         df.to_csv(fname_csv[:-4]+'_10folds.csv')
-        df_all = df_all.append(df)
+        df_list.append(df)
+    df_all = pd.concat(df_list)
     df_all.to_csv(os.path.join(folder_info,'info_swc_all_10folds.csv'))
 
