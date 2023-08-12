@@ -154,7 +154,7 @@ def summarize_branch(
         N = Neuron()
         N.load_eswc(fname)
         if len(N.roots) == 0:
-            print("Empty file:",fname_src)
+            print("Empty file:",fname)
             continue
         NS = NeuronSimplifier(N)
         NS.summarize_by_branch(os.path.join(folder_out, os.path.basename(fname)))

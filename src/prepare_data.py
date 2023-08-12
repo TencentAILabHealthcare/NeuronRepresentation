@@ -38,5 +38,11 @@ for source in ['janelia_mouselight','allen_cell_type','seu_nature']:
     folder_out = f'{data_path}/dendrite/{source}/swc_soma0/'
     filter_axon_and_check(folder_in,folder_out)
 
+    print(f'Calculate features')
+    folder_in = f'{data_path}/dendrite/{source}/swc_soma0/*.swc'
+    folder_out = f'{data_path}/dendrite/{source}/eswc_soma0/'
+    summarize_branch(folder_in, folder_out)
+
+
 # split data into 10 folds
 split_sample_10fold_cv_and_merge(data_path)
