@@ -19,7 +19,7 @@ def download_script():
     soup = BeautifulSoup(page.content, 'html.parser')
     links = soup.find_all("a")
     
-    df = pd.DataFrame()
+    list_link, list_fname = [], []
     for link in links: 
         url = link["href"]
         if url[-4:] != '.swc':
@@ -27,8 +27,10 @@ def download_script():
         print(url)
         fname = wget.download(url, out=folder_output)
         fname = os.path.basename(fname)
-        df = df.append({'link':url,'fname':fname},ignore_index=True)
-    
+        list_link.append(url)
+        list_fname.append(fname)
+
+    df = pd.DataFrame(list(zip(list_link, list_fname)), columns=['link','fname'])
     df.to_csv(fname_csv)
 
 def link_neuron_to_info():
@@ -51,9 +53,10 @@ def link_neuron_to_info():
         dict_swc[tmp]['formatted name'] = tmp
         dict_swc[tmp]['swc__%s__fname'%key] = row['fname']
         dict_swc[tmp]['swc__%s__url'%key] = row['link']
-    df_merged = pd.DataFrame()
+    df_list = []
     for key in dict_swc:
-        df_merged = df_merged.append(dict_swc[key], ignore_index=True)
+        df_list.append(pd.DataFrame([dict_swc[key].values()],columns=dict_swc[key].keys()))
+    df_merged = pd.concat(df_list, ignore_index=True)
     df_merged = df_merged.merge(df_info, how='outer', on='formatted name')
     df_merged.to_csv('../data/info/BIL_recon_infos.csv')
 
