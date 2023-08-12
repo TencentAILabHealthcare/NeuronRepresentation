@@ -55,7 +55,7 @@ def convert_janelia_json(
     mkdir(folder_out)
     tree = get_allen_structure_tree()
 
-    df = pd.DataFrame()
+    row=defaultdict(list)
     for fname_json in filelist:
         fname_swc = os.path.join(folder_out,
                 os.path.basename(fname_json).replace('json','swc'))
@@ -69,36 +69,38 @@ def convert_janelia_json(
         with open(fname_json) as fp:
             data = json.load(fp)
         neuron = data['neuron']
-        row = {}
-        row['specimen__id'] = neuron['idString']
-        row['DOI'] = neuron['DOI']
-        row['specimen__date'] = neuron['sample']['date']
-        row['specimen__strain'] = neuron['sample']['strain']
-        row['label__virus'] = neuron['label']['virus']
-        row['label__fluorophore'] = neuron['label']['fluorophore'].replace(',',';')
-        row['swc__fname'] = os.path.basename(fname_swc)
+        row['specimen__id'].append(neuron['idString'])
+        row['DOI'].append(neuron['DOI'])
+        row['specimen__date'].append(neuron['sample']['date'])
+        row['specimen__strain'].append(neuron['sample']['strain'])
+        row['label__virus'].append(neuron['label']['virus'])
+        row['label__fluorophore'].append(neuron['label']['fluorophore'].replace(',',';'))
+        row['swc__fname'].append(os.path.basename(fname_swc))
 
         if neuron['soma']['allenId'] is not None:
-            row['structure__id'] = neuron['soma']['allenId']
+            row['structure__id'].append(neuron['soma']['allenId'])
             # use info from allen dicitonary
-            structure = tree.get_structures_by_id([row['structure__id']])[0]
+            structure = tree.get_structures_by_id([neuron['soma']['allenId']])[0]
             if structure is None:
-                print(row['structure__id'])
+                print(neuron['soma']['allenId'])
                 import pdb; pdb.set_trace()
-            row['structure__acronym'] = structure['acronym'].replace(',','/')
+            row['structure__acronym'].append(structure['acronym'].replace(',','/'))
             if 'layer ' in structure['name']:
-                row['structure__layer'] = structure['name'].split('layer ')[1]
+                row['structure__layer'].append(structure['name'].split('layer ')[1])
                 parent = tree.get_structures_by_id([structure['structure_id_path'][-2]])[0]
             else:
+                row['structure__layer'].append(None)
                 parent = structure
-            row['structure_parent__id'] = parent['id']
-            row['structure_parent__acronym'] = parent['acronym'].replace(',','/')
+            row['structure_parent__id'].append(parent['id'])
+            row['structure_parent__acronym'].append(parent['acronym'].replace(',','/'))
+        else:
+            row['structure__id'].append(None)
+            row['structure__acronym'].append(None)
+            row['structure_parent__id'].append(None) 
+            row['structure_parent__acronym'].append(None)
+            row['structure__layer'].append(None)
 
-        for key in row:
-            if isinstance(row[key], str) and ',' in row[key]:
-                print('warning: find , in value')
-                print(key,row[key])
-        df = df.append(row, ignore_index=True)
+    df = pd.DataFrame(row)
     df.to_csv(csv_out)
 
 def normalize_root_and_check(
