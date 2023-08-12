@@ -24,7 +24,7 @@ All neuron reconstructions will be downloaded and saved in folder: data/raw/seu_
 ## Janelia MouseLight
 Janelia MouseLight website provides link to download neuron reconstructions in bulk.
 The link can be found in the settings of this webpage: http://ml-neuronbrowser.janelia.org/ (click top right settings button of the webpage).
-Here is the latest link: http://ml-neuronbrowser.janelia.org/download/2022-02-28-json.tar.gz
+Here is the link to the data used in this study: http://ml-neuronbrowser.janelia.org/download/2022-02-28-json.tar.gz
 Extract the file under folder data/raw/janelia_mouselight.
 Makesure there is json files in folder data/raw/janelia_mouselight/json30.
 
@@ -34,8 +34,9 @@ All neuron reconstructions will be downloaded and saved in folder: data/raw/alle
 
 ## Data preprocess
 After data download and verification, run python script 'src/prepare_data.py'.
-All processed neuron reconstructions will be saved in folder data/dendrite
-Neuron infos will be saved in folder data/info
+Preprocess code will (1) clean up neuron reconstruction and normalize, (2) calculate features of branches, (3) tag data and evenly split them into 10 folds for analysis.
+All processed neuron reconstructions with features will be saved in folder data/dendrite/$source/eswc_soma0.
+Neuron infos will be saved in folder data/info.
 
 ## Notes
 The python scripts we provided to download data are not official codes.

@@ -1,3 +1,4 @@
 wget
 allensdk
 vtk
+fast-pytorch-kmeans

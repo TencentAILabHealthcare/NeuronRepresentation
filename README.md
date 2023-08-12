@@ -26,7 +26,7 @@ Abstract
 This repository will hold the code for our neuron representation learning framework, named TreeMoCo. 
 We aim to bring advanced machine learning techniques for learning neuron morphology qualitatively and quantitatively.
 
-[12/21/2023 update]
+[08/12/2023 update]
 More details will be released in following weeks.
 
 Stay tuned!
@@ -34,7 +34,13 @@ Stay tuned!
 -----
 
 # Installation
-TBD
+Install pytorch following [official instruction](https://pytorch.org/get-started/previous-versions/). Our code has been tested on pytorch 1.13.1.
+
+Install dgl following [official instruction](https://www.dgl.ai/pages/start.html).
+
+Install other required python libraries with pip: 
+
+    pip install -r requirement.txt
 
 
 # Data Preparation
@@ -46,6 +52,10 @@ More details will be updated soon.
 For TreeMoCo, run:
     
     python3 train_contrastive_all.py [OPTIONS]
+
+To see all options, run:
+
+    python3 train_contrastive_all.py --help
 
 Please refer to the code for the detailed settings of `[OPTIONS]`. For example, specifying the training datasets, turning the augmentations on/off, and modifying hyper-parameters.
 
