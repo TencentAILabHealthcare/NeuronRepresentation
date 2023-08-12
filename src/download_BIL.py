@@ -32,8 +32,8 @@ def download_script():
     df.to_csv(fname_csv)
 
 def link_neuron_to_info():
-    fname_info = '../info/41586_2021_3941_MOESM4_ESM.xlsx'
-    fname_doi = '../info/BIL_doi.csv'
+    fname_info = '../data/info/41586_2021_3941_MOESM4_ESM.xlsx'
+    fname_doi = '../data/info/BIL_doi.csv'
 
     df_info = pd.read_excel(fname_info)
     df_swc = pd.read_csv(fname_doi)
@@ -55,7 +55,7 @@ def link_neuron_to_info():
     for key in dict_swc:
         df_merged = df_merged.append(dict_swc[key], ignore_index=True)
     df_merged = df_merged.merge(df_info, how='outer', on='formatted name')
-    df_merged.to_csv('../info/BIL_recon_infos.csv')
+    df_merged.to_csv('../data/info/BIL_recon_infos.csv')
 
 if __name__=='__main__':
     download_script()
