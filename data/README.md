@@ -28,6 +28,15 @@ Here is the link to the data used in this study: http://ml-neuronbrowser.janelia
 Extract the file under folder data/raw/janelia_mouselight.
 Makesure there is json files in folder data/raw/janelia_mouselight/json30.
 
+commands:
+```
+# assume at project root folder
+mkdir -p data/raw/janelia_mouselight
+cd data/raw/janelia_mouselight
+wget http://ml-neuronbrowser.janelia.org/download/2022-02-28-json.tar.gz
+tar -xvzf 2022-02-28-json.tar.gz
+```
+
 ## Allen Brain Cell Types
 Run python script 'src/download_ACT.py'. 
 All neuron reconstructions will be downloaded and saved in folder: data/raw/allen_cell_type/swc

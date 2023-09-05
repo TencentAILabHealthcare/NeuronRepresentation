@@ -2,3 +2,10 @@ wget
 allensdk
 vtk
 fast-pytorch-kmeans
+pandas
+requests
+BeautifulSoup4
+
+--extra-index-url https://download.pytorch.org/whl/cu117
+torch==1.13.1+cu117
+torchvision

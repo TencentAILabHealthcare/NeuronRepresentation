@@ -2,6 +2,7 @@ import numpy as np
 from nltk.tree import Tree
 import random
 
+
 class Compose(object):
     def __init__(self, transforms):
         self.transforms = transforms
@@ -12,15 +13,15 @@ class Compose(object):
         return coords_and_feats
 
     def __str__(self) -> str:
-        sep = '\n\t'
+        sep = "\n\t"
         msg = "Compose of ["
         for t in self.transforms:
             msg += f"{sep}{t},"
         msg += "]\n"
         return msg
-    
+
     def __repr__(self) -> str:
-        sep = '\n\t'
+        sep = "\n\t"
         msg = "Compose of ["
         for t in self.transforms:
             msg += f"{sep}{t}"
@@ -33,7 +34,7 @@ class RandomDropSubTrees(object):
         self.probs = probs
         self.max_cnt = max_cnt
         self.cnt = 0
-        
+
     def remove_subtrees(self, root, level_idx):
         reduced_root = Tree(root.label(), [])
         if len(root) == 0:
@@ -41,7 +42,7 @@ class RandomDropSubTrees(object):
         p = np.random.uniform(0, 1, len(root))
         # padding the dropping probabilities
         if level_idx >= len(self.probs):
-            level_idx = len(self.probs)-1
+            level_idx = len(self.probs) - 1
         for child_idx in range(len(root)):
             if self.cnt > self.max_cnt:
                 reduced_root.append(root[child_idx])
@@ -49,7 +50,8 @@ class RandomDropSubTrees(object):
             else:
                 if p[child_idx] > self.probs[level_idx]:
                     reduced_root.append(
-                        self.remove_subtrees(root[child_idx], level_idx + 1))
+                        self.remove_subtrees(root[child_idx], level_idx + 1)
+                    )
                 else:
                     self.cnt += 1
         return reduced_root
@@ -59,10 +61,10 @@ class RandomDropSubTrees(object):
         return self.remove_subtrees(tree, level_idx=0)
 
     def __str__(self) -> str:
-        return f'RandomDropSubTrees(probs={self.probs}, max_cnt={self.max_cnt})'
+        return f"RandomDropSubTrees(probs={self.probs}, max_cnt={self.max_cnt})"
 
     def __repr__(self) -> str:
-        return f'RandomDropSubTrees(probs={self.probs}, max_cnt={self.max_cnt})'
+        return f"RandomDropSubTrees(probs={self.probs}, max_cnt={self.max_cnt})"
 
 
 class RandomSkipParentNode(object):
@@ -72,35 +74,37 @@ class RandomSkipParentNode(object):
         self.cnt = 0
 
     def move_grandson_to_son(self, root, level_idx):
-        if len(root) == 0 or len(root)==1:
+        if len(root) == 0 or len(root) == 1:
             return root
         p = np.random.uniform(0, 1, len(root))
         # padding the dropping probabilities
         if level_idx >= len(self.probs):
-            level_idx = len(self.probs)-1
+            level_idx = len(self.probs) - 1
         for child_idx in range(len(root)):
             if self.cnt >= self.max_cnt:
                 break
             if p[child_idx] < self.probs[level_idx]:
-                if len(root[child_idx]) == 0 or len(root[child_idx])==1:
+                if len(root[child_idx]) == 0 or len(root[child_idx]) == 1:
                     continue
                 else:
-                    idx = random.randint(0, len(root[child_idx])-1)
+                    idx = random.randint(0, len(root[child_idx]) - 1)
                     root[child_idx] = root[child_idx][idx]
                     self.cnt += 1
             else:
-                root[child_idx] = self.move_grandson_to_son(root[child_idx], level_idx+1)
-        return root       
+                root[child_idx] = self.move_grandson_to_son(
+                    root[child_idx], level_idx + 1
+                )
+        return root
 
     def __call__(self, tree):
         self.cnt = 0
-        return  self.move_grandson_to_son(tree, level_idx=0)
+        return self.move_grandson_to_son(tree, level_idx=0)
 
     def __str__(self) -> str:
-        return f'RandomSkipParentNode(probs={self.probs}, max_cnt={self.max_cnt})'
+        return f"RandomSkipParentNode(probs={self.probs}, max_cnt={self.max_cnt})"
 
     def __repr__(self) -> str:
-        return f'RandomSkipParentNode(probs={self.probs}, max_cnt={self.max_cnt})'
+        return f"RandomSkipParentNode(probs={self.probs}, max_cnt={self.max_cnt})"
 
 
 class RandomSwapSiblingSubTrees(object):
@@ -123,29 +127,31 @@ class RandomSwapSiblingSubTrees(object):
                 if len(root[child_idx]) < 2:
                     continue
                 else:
-                    my_subtree_idx = random.randint(0, len(root[child_idx])-1)
-                    sibling_idx = random.randint(0, len(root)-1)
+                    my_subtree_idx = random.randint(0, len(root[child_idx]) - 1)
+                    sibling_idx = random.randint(0, len(root) - 1)
                     if len(root[sibling_idx]) == 0:
                         continue
-                    sibling_subtree_idx = random.randint(0, len(root[sibling_idx])-1)
+                    sibling_subtree_idx = random.randint(0, len(root[sibling_idx]) - 1)
                     my_subtree = root[child_idx][my_subtree_idx].copy()
                     sibling_subtree = root[sibling_idx][sibling_subtree_idx].copy()
                     root[child_idx][my_subtree_idx] = sibling_subtree
                     root[sibling_idx][sibling_subtree_idx] = my_subtree
                     self.cnt += 1
             else:
-                root[child_idx] = self.swap_sibling_subtrees(root[child_idx], level_idx+1)
+                root[child_idx] = self.swap_sibling_subtrees(
+                    root[child_idx], level_idx + 1
+                )
         return root
 
     def __call__(self, tree):
         self.cnt = 0
-        return  self.swap_sibling_subtrees(tree, level_idx=0)
+        return self.swap_sibling_subtrees(tree, level_idx=0)
 
     def __str__(self) -> str:
-        return f'RandomSwapSiblingSubTrees(probs={self.probs}, max_cnt={self.max_cnt})'
+        return f"RandomSwapSiblingSubTrees(probs={self.probs}, max_cnt={self.max_cnt})"
 
     def __repr__(self) -> str:
-        return f'RandomSwapSiblingSubTrees(probs={self.probs}, max_cnt={self.max_cnt})'
+        return f"RandomSwapSiblingSubTrees(probs={self.probs}, max_cnt={self.max_cnt})"
 
 
 class RandomRotateAligned(object):
@@ -167,10 +173,11 @@ class RandomRotateAligned(object):
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomRotateAligned(p={self.prob},axis={self.axis})'
+        return f"RandomRotateAligned(p={self.prob},axis={self.axis})"
 
     def __repr__(self) -> str:
-        return f'RandomRotateAligned(p={self.prob},axis={self.axis})'
+        return f"RandomRotateAligned(p={self.prob},axis={self.axis})"
+
 
 class RandomRotate(object):
     def __init__(self, sigma=0.03, clip=0.09, p=0.5):
@@ -194,12 +201,13 @@ class RandomRotate(object):
             coord = np.dot(coord, R)
         coords_and_feats[:, :3] = coord
         return coords_and_feats
-    
+
     def __str__(self) -> str:
-        return f'RandomRotate(p={self.prob})'
+        return f"RandomRotate(p={self.prob})"
 
     def __repr__(self) -> str:
-        return f'RandomRotate(p={self.prob})'
+        return f"RandomRotate(p={self.prob})"
+
 
 class RandomMaskFeats(object):
     def __init__(self, p=0.2):
@@ -208,17 +216,21 @@ class RandomMaskFeats(object):
     def __call__(self, coords_and_feats):
         if len(coords_and_feats[0]) > 5:
             feats = coords_and_feats[:, 5:]
-            feats[:, np.random.choice(
-                    np.arange(len(feats[0])),
-                    int(len(feats[0])*self.prob))] = 0
+            feats[
+                :,
+                np.random.choice(
+                    np.arange(len(feats[0])), int(len(feats[0]) * self.prob)
+                ),
+            ] = 0
             coords_and_feats[:, 5:] = feats
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomMaskFeats(p={self.prob})'
+        return f"RandomMaskFeats(p={self.prob})"
 
     def __repr__(self) -> str:
-        return f'RandomMaskFeats(p={self.prob})'
+        return f"RandomMaskFeats(p={self.prob})"
+
 
 class RandomElasticate(object):
     def __init__(self, p=0.2, scales=[0.8, 1.2]):
@@ -229,16 +241,19 @@ class RandomElasticate(object):
         if len(coords_and_feats[0]) > 5:
             if np.random.rand() < self.prob:
                 branches = coords_and_feats[:, 5:]
-                scales = np.random.uniform(self.scales[0], self.scales[1], branches.shape)
+                scales = np.random.uniform(
+                    self.scales[0], self.scales[1], branches.shape
+                )
                 branches *= scales
                 coords_and_feats[:, 5:] = branches
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomElasticate(p={self.prob}, scales={self.scales})'
+        return f"RandomElasticate(p={self.prob}, scales={self.scales})"
 
     def __repr__(self) -> str:
-        return f'RandomElasticate(p={self.prob}, scales={self.scales})'
+        return f"RandomElasticate(p={self.prob}, scales={self.scales})"
+
 
 class RandomScaleCoords(object):
     def __init__(self, scale=[0.8, 1.2], p=0.5):
@@ -252,12 +267,12 @@ class RandomScaleCoords(object):
             if len(coords_and_feats[0]) > 5:
                 coords_and_feats[:, 5:] *= scale
         return coords_and_feats
-    
+
     def __str__(self) -> str:
-        return f'RandomScaleCoords(p={self.prob}, scale={self.scale})'
-        
+        return f"RandomScaleCoords(p={self.prob}, scale={self.scale})"
+
     def __repr__(self) -> str:
-        return f'RandomScaleCoords(p={self.prob}, scale={self.scale})'
+        return f"RandomScaleCoords(p={self.prob}, scale={self.scale})"
 
 
 class RandomScaleCoordsTranslation(object):
@@ -276,12 +291,12 @@ class RandomScaleCoordsTranslation(object):
                 coord2 *= scale
                 coords_and_feats[:, 5:] = coord2
         return coords_and_feats
-    
+
     def __str__(self) -> str:
-        return f'RandomScaleCoordsTranslation(p={self.prob}, scale={self.scale})'
-        
+        return f"RandomScaleCoordsTranslation(p={self.prob}, scale={self.scale})"
+
     def __repr__(self) -> str:
-        return f'RandomScaleCoordsTranslation(p={self.prob}, scale={self.scale})'
+        return f"RandomScaleCoordsTranslation(p={self.prob}, scale={self.scale})"
 
 
 class RandomScaleFeats(object):
@@ -298,10 +313,10 @@ class RandomScaleFeats(object):
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomScaleFeats(p={self.prob}, scale={self.scale})'
-        
+        return f"RandomScaleFeats(p={self.prob}, scale={self.scale})"
+
     def __repr__(self) -> str:
-        return f'RandomScaleFeats(p={self.prob}, scale={self.scale})'
+        return f"RandomScaleFeats(p={self.prob}, scale={self.scale})"
 
 
 class RandomShift(object):
@@ -320,10 +335,10 @@ class RandomShift(object):
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomShift(p={self.prob}, shift={self.shift})'
-        
+        return f"RandomShift(p={self.prob}, shift={self.shift})"
+
     def __repr__(self) -> str:
-        return f'RandomShift(p={self.prob}, shift={self.shift})'
+        return f"RandomShift(p={self.prob}, shift={self.shift})"
 
 
 class RandomFlip(object):
@@ -341,10 +356,10 @@ class RandomFlip(object):
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomFlip(p={self.prob})'
-        
+        return f"RandomFlip(p={self.prob})"
+
     def __repr__(self) -> str:
-        return f'RandomFlip(p={self.prob})'
+        return f"RandomFlip(p={self.prob})"
 
 
 class RandomJitter(object):
@@ -355,18 +370,20 @@ class RandomJitter(object):
 
     def __call__(self, coords_and_feats):
         coord = coords_and_feats[:, :3]
-        assert (self.clip > 0)
+        assert self.clip > 0
         if np.random.rand() < self.prob:
-            jitter = np.clip(self.sigma * np.random.randn(coord.shape[0], 3), -self.clip, self.clip)
+            jitter = np.clip(
+                self.sigma * np.random.randn(coord.shape[0], 3), -self.clip, self.clip
+            )
             coord += jitter
         coords_and_feats[:, :3] = coord
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomJitter(p={self.prob}, sigma={self.sigma}, clip={self.clip})'
-        
+        return f"RandomJitter(p={self.prob}, sigma={self.sigma}, clip={self.clip})"
+
     def __repr__(self) -> str:
-        return f'RandomJitter(p={self.prob}, sigma={self.sigma}, clip={self.clip})'
+        return f"RandomJitter(p={self.prob}, sigma={self.sigma}, clip={self.clip})"
 
 
 class RandomJitterLength(object):
@@ -377,26 +394,34 @@ class RandomJitterLength(object):
 
     def __call__(self, coords_and_feats):
         feats1 = coords_and_feats[:, 3:4]
-        assert (self.clip > 0)
+        assert self.clip > 0
         if np.random.rand() < self.prob:
-            jitter1 = np.clip(self.sigma * np.random.randn(*feats1.shape), -self.clip, self.clip)
+            jitter1 = np.clip(
+                self.sigma * np.random.randn(*feats1.shape), -self.clip, self.clip
+            )
             feats1 += jitter1
             if len(coords_and_feats[0]) > 5:
                 feats2 = coords_and_feats[:, 5:]
-                jitter2 = np.clip(self.sigma * np.random.randn(*feats2.shape), -self.clip, self.clip)
+                jitter2 = np.clip(
+                    self.sigma * np.random.randn(*feats2.shape), -self.clip, self.clip
+                )
                 feats2 += jitter2
                 coords_and_feats[:, 5:] = feats2
         coords_and_feats[:, 3:4] = feats1
         return coords_and_feats
 
     def __str__(self) -> str:
-        return f'RandomJitterLength(p={self.prob}, sigma={self.sigma}, clip={self.clip})'
-        
+        return (
+            f"RandomJitterLength(p={self.prob}, sigma={self.sigma}, clip={self.clip})"
+        )
+
     def __repr__(self) -> str:
-        return f'RandomJitterLength(p={self.prob}, sigma={self.sigma}, clip={self.clip})'
+        return (
+            f"RandomJitterLength(p={self.prob}, sigma={self.sigma}, clip={self.clip})"
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     transform = RandomScaleCoordsTranslation(p=1)
 
     coords_feats = np.random.rand(1024, 3)

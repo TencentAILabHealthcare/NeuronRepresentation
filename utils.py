@@ -5,6 +5,7 @@ import logging
 import numpy as np
 import random
 
+
 def set_seed(seed):
     """
     Setting of Global Seed
@@ -20,22 +21,25 @@ def set_seed(seed):
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)  # gpu
 
-def save_checkpoint(state, is_best, filename='checkpoint.pth'):
+
+def save_checkpoint(state, is_best, filename="checkpoint.pth"):
     torch.save(state, filename)
     if is_best:
-        pth = '/'.join(filename.split('/')[:-1])
-        shutil.copyfile(filename, f'{pth}/model_best.pth')
+        pth = "/".join(filename.split("/")[:-1])
+        shutil.copyfile(filename, f"{pth}/model_best.pth")
+
 
 def adjust_learning_rate(optimizer, epoch, args):
     """Decay the learning rate based on schedule"""
     lr = args.lr
     if args.cos:  # cosine lr schedule
-        lr *= 0.5 * (1. + math.cos(math.pi * epoch / args.epochs))
+        lr *= 0.5 * (1.0 + math.cos(math.pi * epoch / args.epochs))
     else:  # stepwise lr schedule
         for milestone in args.schedule:
-            lr *= 0.1 if epoch >= milestone else 1.
+            lr *= 0.1 if epoch >= milestone else 1.0
     for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+        param_group["lr"] = lr
+
 
 def get_root_logger(log_file=None, log_level=logging.INFO):
     """Get the root logger.
@@ -55,15 +59,15 @@ def get_root_logger(log_file=None, log_level=logging.INFO):
     Returns:
         logging.Logger: The root logger.
     """
-    logger = logging.getLogger(__name__.split('.')[0])  # i.e., openselfsup
+    logger = logging.getLogger(__name__.split(".")[0])  # i.e., openselfsup
     # if the logger has been initialized, just return it
     if logger.hasHandlers():
         return logger
 
-    format_str = '%(asctime)s - %(message)s'
+    format_str = "%(asctime)s - %(message)s"
     logging.basicConfig(format=format_str, level=log_level)
     if log_file is not None:
-        file_handler = logging.FileHandler(log_file, 'w')
+        file_handler = logging.FileHandler(log_file, "w")
         file_handler.setFormatter(logging.Formatter(format_str))
         file_handler.setLevel(log_level)
         logger.addHandler(file_handler)
@@ -86,12 +90,13 @@ def print_log(msg, logger=None, level=logging.INFO):
     """
     if logger is None:
         print(msg)
-    elif logger == 'root':
+    elif logger == "root":
         _logger = get_root_logger()
         _logger.log(level, msg)
     elif isinstance(logger, logging.Logger):
         logger.log(level, msg)
-    elif logger != 'silent':
+    elif logger != "silent":
         raise TypeError(
             'logger should be either a logging.Logger object, "root", '
-            '"silent" or None, but got {}'.format(logger))
+            '"silent" or None, but got {}'.format(logger)
+        )

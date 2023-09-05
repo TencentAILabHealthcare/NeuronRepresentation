@@ -1,4 +1,5 @@
 from clustering import Kmeans
+
 # from fast_pytorch_kmeans import KMeans
 
 import argparse
@@ -26,43 +27,59 @@ from sklearn.metrics import confusion_matrix
 from collections import namedtuple
 import dgl
 
-all_wo_others = {'VPM': 0, 'Isocortex_layer23': 1, 'Isocortex_layer4': 2, 
-                 'PRE': 3, 'SUB': 4, 'CP': 5, 'VPL': 6, 'Isocortex_layer6': 7, 
-                 'MG': 8, 'Isocortex_layer5': 9}
-label_idx_to_class_names = {v:k for k,v in all_wo_others.items()}
-NeuronBatch = namedtuple('NeuronBatch', ['graph', 'feats', 'label', 'offset','fname', 'idxs'])
+all_wo_others = {
+    "VPM": 0,
+    "Isocortex_layer23": 1,
+    "Isocortex_layer4": 2,
+    "PRE": 3,
+    "SUB": 4,
+    "CP": 5,
+    "VPL": 6,
+    "Isocortex_layer6": 7,
+    "MG": 8,
+    "Isocortex_layer5": 9,
+}
+label_idx_to_class_names = {v: k for k, v in all_wo_others.items()}
+NeuronBatch = namedtuple(
+    "NeuronBatch", ["graph", "feats", "label", "offset", "fname", "idxs"]
+)
+
 
 def collate_fn(batch):
-        trees, offsets, labels, fnames = [], [0], [], []
-        idxs = []
-        cnt = 0
-        for b in batch:
-            trees.append(b[0])
-            cnt += b[1]
-            offsets.append(cnt)
-            labels.append(b[2])
-            fnames.append(b[3])
-            idxs.append(b[4])
-        offsets.pop(-1)
-        batch_trees = dgl.batch(trees)
-        return NeuronBatch(
-                    graph=batch_trees.to('cuda'),
-                    feats=batch_trees.ndata['feats'].float().to('cuda'),
-                    label=torch.as_tensor(labels).to('cuda'),
-                    offset=torch.IntTensor(offsets).to('cuda'),
-                    fname=fnames,
-                    idxs=torch.IntTensor(idxs).long().to('cuda'))
+    trees, offsets, labels, fnames = [], [0], [], []
+    idxs = []
+    cnt = 0
+    for b in batch:
+        trees.append(b[0])
+        cnt += b[1]
+        offsets.append(cnt)
+        labels.append(b[2])
+        fnames.append(b[3])
+        idxs.append(b[4])
+    offsets.pop(-1)
+    batch_trees = dgl.batch(trees)
+    return NeuronBatch(
+        graph=batch_trees.to("cuda"),
+        feats=batch_trees.ndata["feats"].float().to("cuda"),
+        label=torch.as_tensor(labels).to("cuda"),
+        offset=torch.IntTensor(offsets).to("cuda"),
+        fname=fnames,
+        idxs=torch.IntTensor(idxs).long().to("cuda"),
+    )
+
 
 class DebugNeuronTreeDataset(NeuronTreeDataset):
-    def __init__(self,
-                 phase='full',
-                 input_features=[2,3,4],
-                 topology_transformations=None,
-                 attribute_transformations=None,
-                 dataset='all_wo_others',
-                 data_dir = None,
-                 label_dict=all_wo_others):
-        assert phase in ['train','test', 'full']
+    def __init__(
+        self,
+        phase="full",
+        input_features=[2, 3, 4],
+        topology_transformations=None,
+        attribute_transformations=None,
+        dataset="all_wo_others",
+        data_dir=None,
+        label_dict=all_wo_others,
+    ):
+        assert phase in ["train", "test", "full"]
         super(DebugNeuronTreeDataset, self).__init__(
             phase=phase,
             input_features=input_features,
@@ -70,10 +87,18 @@ class DebugNeuronTreeDataset(NeuronTreeDataset):
             attribute_transformations=attribute_transformations,
             dataset=dataset,
             data_dir=data_dir,
-            label_dict=label_dict)
+            label_dict=label_dict,
+        )
 
     def __getitem__(self, idx):
-        return self.neuron_trees[idx], self.tree_lens[idx], self.targets[idx], self.file_list[idx], idx
+        return (
+            self.neuron_trees[idx],
+            self.tree_lens[idx],
+            self.targets[idx],
+            self.file_list[idx],
+            idx,
+        )
+
 
 def extract2(model, loader, batch0):
     # loader = DataLoader(
@@ -81,58 +106,88 @@ def extract2(model, loader, batch0):
     #                     batch_size=512,
     #                     collate_fn=collate_fn,
     #                     shuffle=True)
-    features = torch.zeros((len(loader.dataset),128)).cuda()
+    features = torch.zeros((len(loader.dataset), 128)).cuda()
     net = model.encoder_q
-    
+
     net.eval()
     with torch.no_grad():
         _ = net(batch0)
-        for batch in tqdm(loader, desc='Feature extracting'):
+        for batch in tqdm(loader, desc="Feature extracting"):
             feature = net(batch)
-            features[batch.idxs,:]=feature
+            features[batch.idxs, :] = feature
         print(batch.idxs[-1])
-    features = nn.functional.normalize(features,dim=1)
+    features = nn.functional.normalize(features, dim=1)
     return features
 
-        
+
 def extract(model, loader, batch0):
-    features = torch.zeros((len(loader.dataset),128)).cuda()
+    features = torch.zeros((len(loader.dataset), 128)).cuda()
     net = model.encoder_q
     net.eval()
     with torch.no_grad():
         _ = net(batch0)
-        for batch in tqdm(loader, desc='Feature extracting'):
+        for batch in tqdm(loader, desc="Feature extracting"):
             feature = net(batch)
-            features[batch.idxs,:]=feature
+            features[batch.idxs, :] = feature
         print(batch.idxs[-1])
-    features = nn.functional.normalize(features,dim=1)
+    features = nn.functional.normalize(features, dim=1)
     return features
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser('Supervised Training')
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser("Supervised Training")
     # Basic
-    parser.add_argument('--dataset', type=str, 
-                        default='all_wo_others')
-    # Model 
-    parser.add_argument('--model', type=str, default='double')
-    parser.add_argument('--child_mode', type=str, default='sum', help='[sum, average]')
-    parser.add_argument('--input_features', nargs="+", type=int, default=[2,3,4,12,13], help='selected columns')
-    parser.add_argument('--h_size', type=int, default=128, help='memory size for lstm')
+    parser.add_argument("--dataset", type=str, default="all_wo_others")
+    # Model
+    parser.add_argument("--model", type=str, default="double")
+    parser.add_argument("--child_mode", type=str, default="sum", help="[sum, average]")
+    parser.add_argument(
+        "--input_features",
+        nargs="+",
+        type=int,
+        default=[2, 3, 4, 12, 13],
+        help="selected columns",
+    )
+    parser.add_argument("--h_size", type=int, default=128, help="memory size for lstm")
     # Training
-    parser.add_argument('--batch_size', type=int, default=128, help='batch size in training [default: 128]')
-    parser.add_argument('--gpu', default=0, type=int, help='GPU id to use.')
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=128,
+        help="batch size in training [default: 128]",
+    )
+    parser.add_argument("--gpu", default=0, type=int, help="GPU id to use.")
     # MoCo specific configs:
-    parser.add_argument('--moco-dim', default=128, type=int, help='feature dimension')
-    parser.add_argument('--moco-k', default=1024, type=int, help='queue size; number of negative keys')
-    parser.add_argument('--moco-m', default=0.99, type=float, help='moco momentum of updating key encoder')
-    parser.add_argument('--moco-t', default=0.1, type=float, help='softmax temperature')
-    parser.add_argument('--symmetric', action='store_true', default=False,
-                        help='use a symmetric loss function that backprops to both views')
+    parser.add_argument("--moco-dim", default=128, type=int, help="feature dimension")
+    parser.add_argument(
+        "--moco-k", default=1024, type=int, help="queue size; number of negative keys"
+    )
+    parser.add_argument(
+        "--moco-m",
+        default=0.99,
+        type=float,
+        help="moco momentum of updating key encoder",
+    )
+    parser.add_argument("--moco-t", default=0.1, type=float, help="softmax temperature")
+    parser.add_argument(
+        "--symmetric",
+        action="store_true",
+        default=False,
+        help="use a symmetric loss function that backprops to both views",
+    )
     # others
-    parser.add_argument('--eval_part', type=str, default='full', help='[full | backbone]')
-    parser.add_argument('--use_translation_feats', action='store_true', default=False,
-                        help='use 24-d translation feats')
-    parser.add_argument('--pretrained', default='', type=str, help='path to pretrained checkpoint')
+    parser.add_argument(
+        "--eval_part", type=str, default="full", help="[full | backbone]"
+    )
+    parser.add_argument(
+        "--use_translation_feats",
+        action="store_true",
+        default=False,
+        help="use 24-d translation feats",
+    )
+    parser.add_argument(
+        "--pretrained", default="", type=str, help="path to pretrained checkpoint"
+    )
     # work_dir/fullset/base_wt_others_unbalanced/epoch_40.pth
 
     args = parser.parse_args()
@@ -140,23 +195,26 @@ if __name__ == '__main__':
     args.projector_bn = True
     args.use_translation_feats = True
     # args.input_features = [2,3,4]
-    args.pretrained = 'work_dir/arch_ablation/full_double_29_bn_proj_bn_all/epoch_90.pth'
+    args.pretrained = (
+        "work_dir/arch_ablation/full_double_29_bn_proj_bn_all/epoch_90.pth"
+    )
     # args.pretrained = 'work_dir/arch_ablation/full_double_5_bn_proj_bn_all-drop_0_0_0.005/epoch_65.pth'
     # args.pretrained = 'work_dir/topo_ablation/double_dummy_coords_normal/epoch_75.pth'
     if args.use_translation_feats:
-        args.input_features+=[i for i in range(20,44)]
+        args.input_features += [i for i in range(20, 44)]
     # hyper parameters
-    device = torch.device('cuda')
+    device = torch.device("cuda")
     # create the model
     print(json.dumps(vars(args), indent=4, sort_keys=True))  # print args
     print("=> creating models ...")
     model = MoCoTreeLSTM(
-        args, # for TreeLSTM
+        args,  # for TreeLSTM
         dim=args.moco_dim,
         K=args.moco_k,
         m=args.moco_m,
         T=args.moco_t,
-        symmetric=args.symmetric).to(device)
+        symmetric=args.symmetric,
+    ).to(device)
     print(model)
     if args.pretrained:
         if os.path.isfile(args.pretrained):
@@ -165,48 +223,44 @@ if __name__ == '__main__':
                 checkpoint = torch.load(args.pretrained)
             else:
                 # Map model to be loaded to specified single gpu.
-                loc = 'cuda:{}'.format(args.gpu)
+                loc = "cuda:{}".format(args.gpu)
                 checkpoint = torch.load(args.pretrained, map_location=loc)
-            model.load_state_dict(checkpoint['state_dict'])
-            print("=> loaded checkpoint '{}' (epoch {})"
-                  .format(args.pretrained, checkpoint['epoch']))
+            model.load_state_dict(checkpoint["state_dict"])
+            print(
+                "=> loaded checkpoint '{}' (epoch {})".format(
+                    args.pretrained, checkpoint["epoch"]
+                )
+            )
         else:
             print("=> no checkpoint found at '{}'".format(args.pretrained))
 
     cudnn.benchmark = True
-    if args.eval_part == 'backbone':
+    if args.eval_part == "backbone":
         net = model.backbone_q
-    elif args.eval_part == 'full':
+    elif args.eval_part == "full":
         net = model.encoder_q
     else:
-        raise ValueError(f'eval part must be in [backbone|full], got {args.eval_part}')
+        raise ValueError(f"eval part must be in [backbone|full], got {args.eval_part}")
 
     dataset = DebugNeuronTreeDataset(
-                        phase='full',
-                        input_features=args.input_features,
-                        dataset=args.dataset,
-                        label_dict=LABEL_DICT[args.dataset])  
+        phase="full",
+        input_features=args.input_features,
+        dataset=args.dataset,
+        label_dict=LABEL_DICT[args.dataset],
+    )
     dummy_loader1 = DataLoader(
-                        dataset=dataset,
-                        batch_size=1,
-                        collate_fn=collate_fn,
-                        shuffle=True)
+        dataset=dataset, batch_size=1, collate_fn=collate_fn, shuffle=True
+    )
     dummy_loader2 = DataLoader(
-                        dataset=dataset,
-                        batch_size=2,
-                        collate_fn=collate_fn,
-                        shuffle=True)
+        dataset=dataset, batch_size=2, collate_fn=collate_fn, shuffle=True
+    )
     loader1 = DataLoader(
-                        dataset=dataset,
-                        batch_size=512,
-                        collate_fn=collate_fn,
-                        shuffle=True)
+        dataset=dataset, batch_size=512, collate_fn=collate_fn, shuffle=True
+    )
     loader2 = DataLoader(
-                        dataset=dataset,
-                        batch_size=256,
-                        collate_fn=collate_fn,
-                        shuffle=True)
-    
+        dataset=dataset, batch_size=256, collate_fn=collate_fn, shuffle=True
+    )
+
     for batch in dummy_loader1:
         batch0 = batch
         break
@@ -216,7 +270,8 @@ if __name__ == '__main__':
 
     feats1 = extract(model, loader1, batch0)
     feats2 = extract2(model, loader2, batch1)
-    print(torch.norm(feats1-feats2))
-    import pdb; pdb.set_trace()
-    print(111)
+    print(torch.norm(feats1 - feats2))
+    import pdb
 
+    pdb.set_trace()
+    print(111)
