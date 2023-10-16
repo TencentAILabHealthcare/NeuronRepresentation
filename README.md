@@ -1,9 +1,9 @@
 # [NeurIPS22] TreeMoCo: Contrastive Neuron Morphology Representation Learning
 
-This repository holds the Pytorch implementation for TreeMoCo described in the paper 
+This repository holds the Pytorch implementation for TreeMoCo described in the paper
 > [**TreeMoCo: Contrastive Neuron Morphology Representation Learning**](https://openreview.net/forum?id=p6hArCtwLAU),  
-> Hanbo Chen*, Jiawei Yang*, Daniel Maxim Iascone, Lijuan Liu, Lei He, Hanchuan Peng, and Jianhua Yao   
-> advances in Neural Information Processing Systems (NeurIPS), 2022 
+> Hanbo Chen*, Jiawei Yang*, Daniel Maxim Iascone, Lijuan Liu, Lei He, Hanchuan Peng, and Jianhua Yao
+> advances in Neural Information Processing Systems (NeurIPS), 2022
 
 <p align="center">
   <img src="tree_moco_overview.png" width="1000">
@@ -23,7 +23,7 @@ Abstract
 
 -------
 
-This repository will hold the code for our neuron representation learning framework, named TreeMoCo. 
+This repository will hold the code for our neuron representation learning framework, named TreeMoCo.
 We aim to bring advanced machine learning techniques for learning neuron morphology qualitatively and quantitatively.
 
 [08/12/2023 update]
@@ -34,44 +34,62 @@ Stay tuned!
 -----
 
 # Installation
-Install pytorch following [official instruction](https://pytorch.org/get-started/previous-versions/). Our code has been tested on pytorch 1.13.1.
 
-Install dgl following [official instruction](https://www.dgl.ai/pages/start.html).
+1. Create a conda environment:
 
-Install other required python libraries with pip: 
+```
+conda create -n tree_moco python=3.7 -y
+conda activate tree_moco
+```
 
-    pip install -r requirement.txt
+2. Install required python libraries with pip:
 
+```
+pip install -r requirements.txt
+```
 
 # Data Preparation
-We three datasets, i.e., the BIL dataset, the JML dataset and the ACT dataset. Some details are in [data/README.md](data/README.md).
-More details will be updated soon.
+
+We use three datasets, i.e., the BIL dataset, the JML dataset and the ACT dataset. Some details are in [data/README.md](data/README.md).
 
 # Training
 
-For TreeMoCo, run:
-    
-    python3 train_contrastive_all.py [OPTIONS]
+(Tested) For TreeMoCo, run:
 
-To see all options, run:
+```
+    python3 train_contrastive_all.py \
+        --epochs 50 \
+        --exp_name test \
+        --bn \
+        --projector_bn \
+        --aug_scale_coords \
+        --aug_jitter_coords \
+        --aug_rotate \
+        --aug_shift_coords \
+        --aug_flip \
+        --aug_mask_feats \
+        --aug_jitter_length \
+        --save_freq 50 \
+        --knn \
+        --eval_act \
+        --eval_jm
+```
 
-    python3 train_contrastive_all.py --help
+I lost track of the `others` category, sso I removed it from the pre-training dataset. This reduced the number of pre-training samples by 28%, which might lead to results slightly different from those in the paper. See `work_dir/test/train_20231016_122408.log` for the reproduced training log.
 
-Please refer to the code for the detailed settings of `[OPTIONS]`. For example, specifying the training datasets, turning the augmentations on/off, and modifying hyper-parameters.
+Comparison of frozen KNN accuracy:
 
-
-To transfer to downstream tasks, run:
-    
-    python3 lincls_or_finetune.py
+Dataset | Original | Reproduced
+--- | --- | ---
+BIL | 78.91% | 76.45%
+JML | 64.29% | 62.67%
+ACT | 55.79% | 56.84%
 
 # Useful tools
-Since this project is to obtain a good discriminative embedding space, we need to visualize the neurons' representations properly. The followings are useful scripts for the uses of interest.
- - `cluster_analysis.py`: extract neurons' features from a pre-trained model and perform clustering.
- - `visulize_cluster.py`: plot all neuron screenshots by tSNE coordinates to form an overview of the representation space. This script is mainly written by Hanbo.
- - `generate_neuron_TU.py`: convert our neuron datasets to the TUDataset format. Most of graph contrastive learning works are based on the TUDataset format.
- - `plot_trendlines.ipynb`: plot the KNN accuracy curves v.s. training epochs and the corresponding linear trendlines.
 
+Since this project is to obtain a good discriminative embedding space, we need to visualize the neurons' representations properly. The followings are useful scripts for the use of interest.
 
-
-
-    
+- `cluster_analysis.py`: extract neurons' features from a pre-trained model and perform clustering.
+- `visulize_cluster.py`: plot all neuron screenshots by tSNE coordinates to form an overview of the representation space. This script is mainly written by Hanbo.
+- `generate_neuron_TU.py`: convert our neuron datasets to the TUDataset format. Most of graph contrastive learning works are based on the TUDataset format.
+- `plot_trendlines.ipynb`: plot the KNN accuracy curves v.s. training epochs and the corresponding linear trendlines.

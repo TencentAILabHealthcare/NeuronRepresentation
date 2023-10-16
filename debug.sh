@@ -1,0 +1,16 @@
+python3 train_contrastive_all.py \
+    --epochs 50 \
+    --exp_name test \
+    --bn \
+    --projector_bn \
+    --aug_scale_coords \
+    --aug_jitter_coords \
+    --aug_rotate \
+    --aug_shift_coords \
+    --aug_flip \
+    --aug_mask_feats \
+    --aug_jitter_length \
+    --save_freq 50 \
+    --knn \
+    --eval_act \
+    --eval_jm

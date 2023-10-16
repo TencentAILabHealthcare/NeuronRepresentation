@@ -134,7 +134,7 @@ def script_plot_tsne_graphcl():
     sample_frac = 1
     file_cache = pkl.load(
         open(
-            "/apdcephfs/private_jiaweiyyang/project/neuron/NeuronRepresentation/datasets/neuron_morpho/processed_datasets_bk2/all_wo_others_full.pkl",
+            "/apdcephfs/private_jiaweiyyang/project/neuron/NeuronRepresentation/data/dendrite/processed_datasets_bk2/all_wo_others_full.pkl",
             "rb",
         )
     )
@@ -150,7 +150,7 @@ def script_plot_tsne_graphcl():
     np.random.seed(2000)
     attributes = ["random"]
 
-    dataset_dict = {"seu_nature": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
+    dataset_dict = {"bil": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
     k = 1
     views = ["xy"]
     for view in views:
@@ -227,14 +227,14 @@ def script_plot_tsne_vae():
     sample_frac = 1
     file_cache = pkl.load(
         open(
-            "/apdcephfs/private_jiaweiyyang/project/neuron/NeuronRepresentation/datasets/neuron_morpho/processed_datasets_bk2/all_wo_others_full.pkl",
+            "/apdcephfs/private_jiaweiyyang/project/neuron/NeuronRepresentation/data/dendrite/processed_datasets_bk2/all_wo_others_full.pkl",
             "rb",
         )
     )
     file_lists = file_cache["file_list"]
     file_lists = [x.split("/")[-1] for x in file_lists]
     vae_filelist = open(
-        "rebuttal/train_seu_6class_xyzlcV24_model_best.pt_all_filelist.txt"
+        "rebuttal/train_bil_6class_xyzlcV24_model_best.pt_all_filelist.txt"
     ).readlines()
     vae_ids = [x.split("/")[-1].strip() for x in vae_filelist]
     features, file_names = [], []
@@ -253,7 +253,7 @@ def script_plot_tsne_vae():
     np.random.seed(2000)
     attributes = ["random"]
 
-    dataset_dict = {"seu_nature": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
+    dataset_dict = {"bil": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
     k = 1
     views = ["xy"]
     for view in views:
@@ -330,14 +330,14 @@ def script_plot_tsne():
     sample_frac = 1
     file_cache = pkl.load(
         open(
-            "/apdcephfs/private_jiaweiyyang/project/neuron/NeuronRepresentation/datasets/neuron_morpho/processed_datasets_bk2/all_wo_others_full.pkl",
+            "/apdcephfs/private_jiaweiyyang/project/neuron/NeuronRepresentation/data/dendrite/processed_datasets_bk2/all_wo_others_full.pkl",
             "rb",
         )
     )
     file_lists = file_cache["file_list"]
     file_lists = [x.split("/")[-1] for x in file_lists]
     vae_filelist = open(
-        "rebuttal/train_seu_6class_xyzlcV24_model_best.pt_all_filelist.txt"
+        "rebuttal/train_bil_6class_xyzlcV24_model_best.pt_all_filelist.txt"
     ).readlines()
     vae_ids = [x.split("/")[-1].strip() for x in vae_filelist]
     features, file_names = [], []
@@ -367,7 +367,7 @@ def script_plot_tsne():
     # attributes.insert(0, 'random')
     attributes = ["random"]
 
-    dataset_dict = {"seu_nature": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
+    dataset_dict = {"bil": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
     k = 1
     views = ["xy"]
     for view in views:
@@ -468,7 +468,7 @@ def script_plot_tsne2():
     # attributes.insert(0, 'random')
     np.random.seed(2000)
 
-    dataset_dict = {"seu_nature": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
+    dataset_dict = {"bil": 0, "janelia_mouselight": 1, "allen_cell_type": 2}
     k = 1
     views = ["xy"]
     for view in views:

@@ -2,13 +2,11 @@ import pickle as pkl
 import numpy as np
 import os
 
-for dataset in ["seu_6_classes", "JM", "ACT"]:
+for dataset in ["bil_6_classes", "JM", "ACT"]:
     for split in ["train", "test"]:
         dataset_name = f"{dataset}_{split}"
         print(dataset_name)
-        saved_cache = (
-            f"datasets/neuron_morpho/processed_datasets_bk2/{dataset_name}.pkl"
-        )
+        saved_cache = f"data/dendrite/processed_datasets_bk2/{dataset_name}.pkl"
         with open(saved_cache, "rb") as f:
             saved_cache = pkl.load(f)
         lines, i2ps, targets = (
@@ -65,10 +63,10 @@ for dataset in ["seu_6_classes", "JM", "ACT"]:
             offset += len(neuron_graph)
 
 lines, targets = [], []
-for dataset in ["seu_6_classes", "JM", "ACT"]:
+for dataset in ["bil_6_classes", "JM", "ACT"]:
     dataset_name = f"{dataset}_train"
     print(dataset_name)
-    saved_cache = f"datasets/neuron_morpho/processed_datasets_bk2/{dataset_name}.pkl"
+    saved_cache = f"data/dendrite/processed_datasets_bk2/{dataset_name}.pkl"
     with open(saved_cache, "rb") as f:
         saved_cache = pkl.load(f)
     _lines, _targets = saved_cache["lines"], saved_cache["targets"]

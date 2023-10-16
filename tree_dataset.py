@@ -12,20 +12,6 @@ NeuronBatch = namedtuple("NeuronBatch", ["graph", "feats", "label", "offset"])
 NeuronBatchSingle = namedtuple("NeuronBatchSingle", ["graph", "feats", "offset"])
 NeuronBatchTwoViews = namedtuple("NeuronBatchTwoViews", ["view1", "view2"])
 
-all_wt_others = {
-    "VPM": 0,
-    "others": 1,
-    "Isocortex_layer23": 2,
-    "Isocortex_layer4": 3,
-    "PRE": 4,
-    "SUB": 5,
-    "CP": 6,
-    "VPL": 7,
-    "Isocortex_layer6": 8,
-    "MG": 9,
-    "Isocortex_layer5": 10,
-}
-
 all_wo_others = {
     "VPM": 0,
     "Isocortex_layer23": 1,
@@ -39,7 +25,7 @@ all_wo_others = {
     "Isocortex_layer5": 9,
 }
 
-SEU_6_classes = {
+BIL_6_classes = {
     "CP": 0,
     "Isocortex_layer23": 1,
     "Isocortex_layer4": 2,
@@ -63,9 +49,8 @@ ACT_classes = {
 }
 
 LABEL_DICT = {
-    "all_wt_others": all_wt_others,
     "all_wo_others": all_wo_others,
-    "seu_6_classes": SEU_6_classes,
+    "bil_6_classes": BIL_6_classes,
     "JM": JM_classes,
     "ACT": ACT_classes,
 }
@@ -132,7 +117,7 @@ class NeuronTreeDataset(object):
         input_features=[2, 3, 4, 12, 13],
         topology_transformations=None,
         attribute_transformations=None,
-        dataset="seu_6_classes",
+        dataset="bil_6_classes",
         data_dir=None,
         labels=None,
         label_dict=None,
@@ -191,9 +176,11 @@ class NeuronTreeDataset(object):
 
     def load_filecache(self):
         if self.dataset != "rebuttal":
-            if not os.path.exists("datasets/neuron_morpho/processed_datasets_bk2/"):
-                os.makedirs("datasets/neuron_morpho/processed_datasets_bk2/")
-            saved_cache = f"datasets/neuron_morpho/processed_datasets_bk2/{self.dataset}_{self.phase}.pkl"
+            if not os.path.exists("data/dendrite/processed_datasets/"):
+                os.makedirs("data/dendrite/processed_datasets/")
+            saved_cache = (
+                f"data/dendrite/processed_datasets/{self.dataset}_{self.phase}.pkl"
+            )
             print("loading from", saved_cache)
             if os.path.exists(saved_cache) and not self.reload:
                 with open(saved_cache, "rb") as f:
@@ -203,19 +190,17 @@ class NeuronTreeDataset(object):
                     saved_cache["i2ps"],
                     saved_cache["targets"],
                 )
-                # file_list = saved_cache['file_list']
+                file_list = saved_cache["file_list"]
             else:
                 lines, i2ps, targets, file_list = self.load_and_cache(saved_cache)
             self.lines = [x[:, self.input_features] for x in lines]
             self.i2ps, self.targets = i2ps, targets
-            # self.file_list = file_list
+            self.file_list = file_list
         else:
             self.lines = []
             self.i2ps, self.targets, self.file_list = [], [], []
-            for dataset in ["seu_6_classes", "JM", "ACT"]:
-                saved_cache = (
-                    f"datasets/neuron_morpho/processed_datasets_bk2/{dataset}_train.pkl"
-                )
+            for dataset in ["bil_6_classes", "JM", "ACT"]:
+                saved_cache = f"data/dendrite/processed_datasets/{dataset}_train.pkl"
                 print("loading from", saved_cache)
                 with open(saved_cache, "rb") as f:
                     saved_cache = pickle.load(f)
@@ -263,9 +248,9 @@ class NeuronTreeDataset(object):
                     targets.append(self.label_dict[filename.split("/")[-4]])
         cached["lines"], cached["i2ps"], cached["targets"] = lines, i2ps, targets
         cached["file_list"] = file_list
-        # with open(saved_cache, 'wb') as f:
-        # pickle.dump(cached, f)
-        # print('saving to', saved_cache)
+        with open(saved_cache, "wb") as f:
+            pickle.dump(cached, f)
+        print("saving to", saved_cache)
         return lines, i2ps, targets, file_list
 
     def lines2trees(self, lines, i2p):
@@ -415,7 +400,7 @@ class NeuronTreeDatasetTwoViews(NeuronTreeDataset):
         input_features=[2, 3, 4, 12, 13],
         topology_transformations=None,
         attribute_transformations=None,
-        dataset="data_seu_3class",
+        dataset="data_bil_3class",
         data_dir=None,
         labels=None,
         label_dict=None,
@@ -460,8 +445,8 @@ class NeuronTreeDatasetTwoViews(NeuronTreeDataset):
 
 
 def process_diff_datasets():
-    root = "datasets/neuron_morpho_dendrite/experiment_split/all_eswc_soma0_ssl"
-    seu_classes = [
+    root = "data/dendrite/all_eswc_soma0_ssl"
+    bil_classes = [
         "CP",
         "Isocortex_layer23",
         "Isocortex_layer4",
@@ -469,12 +454,12 @@ def process_diff_datasets():
         "Isocortex_layer6",
         "VPM",
     ]
-    seu_train, seu_test, seu_full = [], [], []
-    for label in seu_classes:
-        seu_train += [f"{root}/{label}/seu_nature-{i}" for i in range(8)]
-        seu_test += [f"{root}/{label}/seu_nature-{i}" for i in range(8, 10)]
-        seu_full += [f"{root}/{label}/seu_nature-{i}" for i in range(10)]
-    seu_6_classes = {"train": seu_train, "test": seu_test, "full": seu_full}
+    bil_train, bil_test, bil_full = [], [], []
+    for label in bil_classes:
+        bil_train += [f"{root}/{label}/bil-{i}" for i in range(8)]
+        bil_test += [f"{root}/{label}/bil-{i}" for i in range(8, 10)]
+        bil_full += [f"{root}/{label}/bil-{i}" for i in range(10)]
+    bil_6_classes = {"train": bil_train, "test": bil_test, "full": bil_full}
 
     JM_classes = ["Isocortex_layer23", "Isocortex_layer5", "Isocortex_layer6", "VPM"]
     JMclasses_label_dict = {
@@ -506,10 +491,10 @@ def process_diff_datasets():
 
     ACT_4_classes = {"test": ACT_test}
 
-    labels = [seu_classes, JM_classes, ACT_classes]
+    labels = [bil_classes, JM_classes, ACT_classes]
     label_dicts = [None, JMclasses_label_dict, ACT_classes_label_dict]
-    dataset_names = ["seu_6_classes", "JM_4_classes", "ACT_4_classes"]
-    for ix, data_dir in enumerate([seu_6_classes, JM_4_classes, ACT_4_classes]):
+    dataset_names = ["bil_6_classes", "JM_4_classes", "ACT_4_classes"]
+    for ix, data_dir in enumerate([bil_6_classes, JM_4_classes, ACT_4_classes]):
         for phase in ["train", "test", "full"]:
             if phase not in data_dir:
                 continue
@@ -527,7 +512,7 @@ def process_diff_datasets():
 
 
 def get_all_datasets():
-    root = "datasets/neuron_morpho_dendrite/experiment_split/all_eswc_soma0_ssl"
+    root = "data/dendrite/all_eswc_soma0_ssl"
     classes = os.listdir(root)
     full_wt_others, full_wo_others = [], []
     for label in classes:
@@ -544,10 +529,10 @@ def get_all_datasets():
             full_wo_others += [f"{root}/{label}/{x}" for x in candidate_folds]
     dataset_wt_others = {"full": full_wt_others}
     dataset_wo_others = {"full": full_wo_others}
-    datasets = [dataset_wt_others, dataset_wo_others]
+    datasets = [dataset_wo_others]
 
-    label_dicts = [all_wt_others, all_wo_others]
-    dataset_names = ["all_wt_others", "all_wo_others"]
+    label_dicts = [all_wo_others]
+    dataset_names = ["all_wo_others"]
     for ix, data_dir in enumerate(datasets):
         for phase in ["full"]:
             ds = NeuronTreeDataset(
@@ -563,15 +548,15 @@ def get_all_datasets():
             print(len(ds.file_list))
 
 
-def split_SEU_JM_ACT():
-    root = "datasets/neuron_morpho_dendrite/experiment_split/all_eswc_soma0_ssl"
+def split_BIL_JM_ACT():
+    root = "data/dendrite/all_eswc_soma0_ssl"
 
-    seu_train, seu_test, seu_full = [], [], []
-    for label in SEU_6_classes.keys():
-        seu_train += [f"{root}/{label}/seu_nature-{i}" for i in range(8)]
-        seu_test += [f"{root}/{label}/seu_nature-{i}" for i in range(8, 10)]
-        seu_full += [f"{root}/{label}/seu_nature-{i}" for i in range(10)]
-    seu_6_classes = {"train": seu_train, "test": seu_test, "full": seu_full}
+    bil_train, bil_test, bil_full = [], [], []
+    for label in BIL_6_classes.keys():
+        bil_train += [f"{root}/{label}/bil-{i}" for i in range(8)]
+        bil_test += [f"{root}/{label}/bil-{i}" for i in range(8, 10)]
+        bil_full += [f"{root}/{label}/bil-{i}" for i in range(10)]
+    bil_6_classes = {"train": bil_train, "test": bil_test, "full": bil_full}
 
     JM_train, JM_test, JM_full = [], [], []
     for label in JM_classes.keys():
@@ -587,10 +572,10 @@ def split_SEU_JM_ACT():
         ACT_full += [f"{root}/{label}/allen_cell_type-{i}" for i in range(10)]
     ACT_4_classes = {"train": ACT_train, "test": ACT_test, "full": ACT_full}
 
-    label_dicts = [SEU_6_classes, JM_classes, ACT_classes]
-    dataset_names = ["seu_6_classes", "JM", "ACT"]
-    for ix, data_dir in enumerate([seu_6_classes, JM_4_classes, ACT_4_classes]):
-        for phase in ["full"]:
+    label_dicts = [BIL_6_classes, JM_classes, ACT_classes]
+    dataset_names = ["bil_6_classes", "JM", "ACT"]
+    for ix, data_dir in enumerate([bil_6_classes, JM_4_classes, ACT_4_classes]):
+        for phase in ["full", "train", "test"]:
             if phase not in data_dir:
                 continue
             ds = NeuronTreeDataset(
@@ -607,5 +592,5 @@ def split_SEU_JM_ACT():
 
 
 if __name__ == "__main__":
-    split_SEU_JM_ACT()
-    # get_all_datasets()
+    split_BIL_JM_ACT()
+    get_all_datasets()

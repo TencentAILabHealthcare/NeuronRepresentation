@@ -25,8 +25,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset",
         type=str,
-        default="seu_6_classes",
-        help="[seu_6_classes | JM | ACT]",
+        default="bil_6_classes",
+        help="[bil_6_classes | JM | ACT]",
     )
     parser.add_argument("--seed", type=int, default=42, help="random seed")
 

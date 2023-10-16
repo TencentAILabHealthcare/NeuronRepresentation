@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
-from tree_dataset import NeuronTreeDataset, SEU_6_classes, get_collate_fn, LABEL_DICT
+from tree_dataset import NeuronTreeDataset, BIL_6_classes, get_collate_fn, LABEL_DICT
 from treelstm import TreeLSTM, TreeLSTMDouble, TreeLSTM_wo_MLP
 from tqdm import tqdm
 import pandas as pd
@@ -476,7 +476,7 @@ if __name__ == "__main__":
     args.projector_bn = True
     # args.use_translation_feats = False
     # args.input_features = [2,3,4]
-    # args.pretrained = 'work_dir/clf/double_5_seu_6_classes_aug_all/epoch_100.pth'
+    # args.pretrained = 'work_dir/clf/double_5_bil_6_classes_aug_all/epoch_100.pth'
     # args.pretrained = 'work_dir/final/double_5_bn_proj_bn_all/epoch_65.pth'
     args.pretrained = "work_dir/rebuttal/random_init_ori/epoch_100.pth"
     # args.pretrained = 'work_dir/arch_ablation/full_double_29_bn_proj_bn_all/epoch_90.pth'
@@ -502,7 +502,7 @@ if __name__ == "__main__":
         model = TreeLSTMDouble(
             len(args.input_features),
             h_size=args.h_size,
-            num_classes=len(LABEL_DICT["seu_6_classes"]),
+            num_classes=len(LABEL_DICT["bil_6_classes"]),
         ).to(device)
     print(model)
     if args.pretrained:
@@ -569,10 +569,10 @@ if __name__ == "__main__":
     # plt.savefig('final_results/rebuttal/trnn_29_feats.pdf')
     df = pd.DataFrame()
     features = np.load(
-        "vis_analysis/rebuttal/train_seu_6class_xyzlcV24_model_best.pt_all_latent.npy"
+        "vis_analysis/rebuttal/train_bil_6class_xyzlcV24_model_best.pt_all_latent.npy"
     )
     file_names = open(
-        "vis_analysis/rebuttal/train_seu_6class_xyzlcV24_model_best.pt_all_filelist.txt"
+        "vis_analysis/rebuttal/train_bil_6class_xyzlcV24_model_best.pt_all_filelist.txt"
     ).readlines()
     file_names = [x.strip() for x in file_names]
     tsne = TSNE(n_components=2, verbose=1, random_state=36)

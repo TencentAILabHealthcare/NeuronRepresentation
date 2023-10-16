@@ -8,7 +8,7 @@ from collections import defaultdict
 
 def download_script():
     fname_csv = "./data/info/BIL_doi.csv"
-    folder_output = "./data/raw/seu_nature/swc"
+    folder_output = "./data/raw/bil/swc"
     request_url = "https://doi.brainimagelibrary.org/doi/10.35077/g.73"
 
     try:

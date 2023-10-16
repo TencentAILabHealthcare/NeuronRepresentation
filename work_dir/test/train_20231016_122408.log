@@ -1,0 +1,1138 @@
+2023-10-16 12:24:08,039 - {
+    "aug_drop_tree": false,
+    "aug_elasticate": false,
+    "aug_flip": true,
+    "aug_jitter_coords": true,
+    "aug_jitter_length": true,
+    "aug_mask_feats": true,
+    "aug_rotate": true,
+    "aug_scale_coords": true,
+    "aug_scale_feats": false,
+    "aug_shift_coords": true,
+    "aug_skip_parent_node": false,
+    "aug_swap_sibling_subtrees": false,
+    "batch_size": 128,
+    "bn": true,
+    "child_mode": "sum",
+    "cos": false,
+    "data_dir": "data/raw/bil",
+    "dataset": "all_wo_others",
+    "debug": false,
+    "drop_tree_prob": [
+        0,
+        0,
+        0.005
+    ],
+    "epochs": 50,
+    "eval_act": true,
+    "eval_jm": true,
+    "eval_part": "full",
+    "exp_name": "test",
+    "gpu": 0,
+    "h_size": 128,
+    "input_features": [
+        2,
+        3,
+        4,
+        12,
+        13
+    ],
+    "kmeans": false,
+    "knn": true,
+    "knn_k": 20,
+    "knn_t": 0.5,
+    "label_dict": "all_wo_others",
+    "lr": 0.06,
+    "moco_dim": 128,
+    "moco_k": 1024,
+    "moco_m": 0.99,
+    "moco_t": 0.1,
+    "model": "double",
+    "projector_bn": true,
+    "resume": "",
+    "save_freq": 50,
+    "schedule": [
+        120,
+        160
+    ],
+    "seed": 42,
+    "start_epoch": 0,
+    "symmetric": false,
+    "train_split": "full",
+    "use_balanced_memory_data": false,
+    "use_translation_feats": false,
+    "val_freq": 5,
+    "wd": 0.0005,
+    "work_dir": "./work_dir/test"
+}
+2023-10-16 12:24:08,039 - => creating models ...
+2023-10-16 12:24:08,593 - MoCoTreeLSTM(
+  (backbone_q): TreeLSTMDouble(
+    (mlp1): Sequential(
+      (0): Linear(in_features=5, out_features=128, bias=True)
+      (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+      (3): Linear(in_features=128, out_features=256, bias=True)
+      (4): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (5): ReLU()
+      (6): Linear(in_features=256, out_features=128, bias=True)
+    )
+    (cell): TreeLSTMDoubleCell(
+      (W1_iouf): Linear(in_features=128, out_features=512, bias=True)
+      (U1_iouf): Linear(in_features=128, out_features=512, bias=True)
+      (W2_iouf): Linear(in_features=128, out_features=512, bias=True)
+      (U2_iouf): Linear(in_features=128, out_features=512, bias=True)
+    )
+  )
+  (backbone_k): TreeLSTMDouble(
+    (mlp1): Sequential(
+      (0): Linear(in_features=5, out_features=128, bias=True)
+      (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU()
+      (3): Linear(in_features=128, out_features=256, bias=True)
+      (4): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (5): ReLU()
+      (6): Linear(in_features=256, out_features=128, bias=True)
+    )
+    (cell): TreeLSTMDoubleCell(
+      (W1_iouf): Linear(in_features=128, out_features=512, bias=True)
+      (U1_iouf): Linear(in_features=128, out_features=512, bias=True)
+      (W2_iouf): Linear(in_features=128, out_features=512, bias=True)
+      (U2_iouf): Linear(in_features=128, out_features=512, bias=True)
+    )
+  )
+  (projector_q): Sequential(
+    (0): Linear(in_features=128, out_features=128, bias=True)
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+    (2): ReLU()
+    (3): Linear(in_features=128, out_features=128, bias=True)
+  )
+  (projector_k): Sequential(
+    (0): Linear(in_features=128, out_features=128, bias=True)
+    (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+    (2): ReLU()
+    (3): Linear(in_features=128, out_features=128, bias=True)
+  )
+  (encoder_q): Sequential(
+    (0): TreeLSTMDouble(
+      (mlp1): Sequential(
+        (0): Linear(in_features=5, out_features=128, bias=True)
+        (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU()
+        (3): Linear(in_features=128, out_features=256, bias=True)
+        (4): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (5): ReLU()
+        (6): Linear(in_features=256, out_features=128, bias=True)
+      )
+      (cell): TreeLSTMDoubleCell(
+        (W1_iouf): Linear(in_features=128, out_features=512, bias=True)
+        (U1_iouf): Linear(in_features=128, out_features=512, bias=True)
+        (W2_iouf): Linear(in_features=128, out_features=512, bias=True)
+        (U2_iouf): Linear(in_features=128, out_features=512, bias=True)
+      )
+    )
+    (1): Sequential(
+      (0): Linear(in_features=128, out_features=128, bias=True)
+      (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+      (2): ReLU()
+      (3): Linear(in_features=128, out_features=128, bias=True)
+    )
+  )
+  (encoder_k): Sequential(
+    (0): TreeLSTMDouble(
+      (mlp1): Sequential(
+        (0): Linear(in_features=5, out_features=128, bias=True)
+        (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU()
+        (3): Linear(in_features=128, out_features=256, bias=True)
+        (4): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (5): ReLU()
+        (6): Linear(in_features=256, out_features=128, bias=True)
+      )
+      (cell): TreeLSTMDoubleCell(
+        (W1_iouf): Linear(in_features=128, out_features=512, bias=True)
+        (U1_iouf): Linear(in_features=128, out_features=512, bias=True)
+        (W2_iouf): Linear(in_features=128, out_features=512, bias=True)
+        (U2_iouf): Linear(in_features=128, out_features=512, bias=True)
+      )
+    )
+    (1): Sequential(
+      (0): Linear(in_features=128, out_features=128, bias=True)
+      (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+      (2): ReLU()
+      (3): Linear(in_features=128, out_features=128, bias=True)
+    )
+  )
+)
+2023-10-16 12:24:08,594 - =====>using augmentations
+2023-10-16 12:24:08,594 - Compose of [
+	RandomScaleCoords(p=0.2, scale=[0.8, 1.2]),
+	RandomRotate(p=0.5),
+	RandomJitter(p=0.2, sigma=1, clip=5),
+	RandomShift(p=0.2, shift=[5, 5, 5]),
+	RandomFlip(p=1),
+	RandomMaskFeats(p=0.2),
+	RandomJitterLength(p=0.2, sigma=0.1, clip=1),]
+
+2023-10-16 12:24:08,594 - None
+2023-10-16 12:24:12,058 - Train Epoch 001 | Step 000 | Loss 1.0942 | Elasped 0:00:01 | ETA 0:19:22
+2023-10-16 12:24:12,628 - Train Epoch 001 | Step 001 | Loss 3.4527 | Elasped 0:00:01 | ETA 0:13:56
+2023-10-16 12:24:13,290 - Train Epoch 001 | Step 002 | Loss 4.2623 | Elasped 0:00:02 | ETA 0:12:34
+2023-10-16 12:24:13,901 - Train Epoch 001 | Step 003 | Loss 4.4027 | Elasped 0:00:03 | ETA 0:11:42
+2023-10-16 12:24:14,497 - Train Epoch 001 | Step 004 | Loss 4.6476 | Elasped 0:00:03 | ETA 0:11:07
+2023-10-16 12:24:15,180 - Train Epoch 001 | Step 005 | Loss 4.6381 | Elasped 0:00:04 | ETA 0:10:57
+2023-10-16 12:24:15,822 - Train Epoch 001 | Step 006 | Loss 4.9819 | Elasped 0:00:05 | ETA 0:10:45
+2023-10-16 12:24:16,530 - Train Epoch 001 | Step 007 | Loss 4.5637 | Elasped 0:00:05 | ETA 0:10:42
+2023-10-16 12:24:17,145 - Train Epoch 001 | Step 008 | Loss 4.4765 | Elasped 0:00:06 | ETA 0:10:31
+2023-10-16 12:24:17,724 - Train Epoch 001 | Step 009 | Loss 4.5573 | Elasped 0:00:06 | ETA 0:10:19
+2023-10-16 12:24:18,374 - Train Epoch 001 | Step 010 | Loss 4.3299 | Elasped 0:00:07 | ETA 0:10:14
+2023-10-16 12:24:18,941 - Train Epoch 001 | Step 011 | Loss 4.0804 | Elasped 0:00:08 | ETA 0:10:04
+2023-10-16 12:24:19,564 - Train Epoch 001 | Step 012 | Loss 4.1737 | Elasped 0:00:08 | ETA 0:10:00
+2023-10-16 12:24:20,228 - Train Epoch 001 | Step 013 | Loss 4.0377 | Elasped 0:00:09 | ETA 0:09:58
+2023-10-16 12:24:20,866 - Train Epoch 001 | Step 014 | Loss 3.9109 | Elasped 0:00:10 | ETA 0:09:55
+2023-10-16 12:24:21,527 - Train Epoch 001 | Step 015 | Loss 4.0943 | Elasped 0:00:10 | ETA 0:09:54
+2023-10-16 12:24:22,134 - Train Epoch 001 | Step 016 | Loss 3.9886 | Elasped 0:00:11 | ETA 0:09:50
+2023-10-16 12:24:22,738 - Train Epoch 001 | Step 017 | Loss 4.1769 | Elasped 0:00:11 | ETA 0:09:46
+2023-10-16 12:24:23,420 - Train Epoch 002 | Step 000 | Loss 3.9209 | Elasped 0:00:12 | ETA 0:09:46
+2023-10-16 12:24:24,049 - Train Epoch 002 | Step 001 | Loss 3.9596 | Elasped 0:00:13 | ETA 0:09:44
+2023-10-16 12:24:24,626 - Train Epoch 002 | Step 002 | Loss 3.7929 | Elasped 0:00:13 | ETA 0:09:40
+2023-10-16 12:24:25,319 - Train Epoch 002 | Step 003 | Loss 3.9448 | Elasped 0:00:14 | ETA 0:09:40
+2023-10-16 12:24:25,950 - Train Epoch 002 | Step 004 | Loss 3.8563 | Elasped 0:00:15 | ETA 0:09:38
+2023-10-16 12:24:26,691 - Train Epoch 002 | Step 005 | Loss 3.8715 | Elasped 0:00:15 | ETA 0:09:41
+2023-10-16 12:24:27,306 - Train Epoch 002 | Step 006 | Loss 3.7502 | Elasped 0:00:16 | ETA 0:09:38
+2023-10-16 12:24:27,918 - Train Epoch 002 | Step 007 | Loss 3.6906 | Elasped 0:00:17 | ETA 0:09:36
+2023-10-16 12:24:28,573 - Train Epoch 002 | Step 008 | Loss 3.8674 | Elasped 0:00:17 | ETA 0:09:35
+2023-10-16 12:24:29,150 - Train Epoch 002 | Step 009 | Loss 3.7600 | Elasped 0:00:18 | ETA 0:09:32
+2023-10-16 12:24:29,785 - Train Epoch 002 | Step 010 | Loss 3.6810 | Elasped 0:00:19 | ETA 0:09:31
+2023-10-16 12:24:30,415 - Train Epoch 002 | Step 011 | Loss 3.7389 | Elasped 0:00:19 | ETA 0:09:29
+2023-10-16 12:24:30,997 - Train Epoch 002 | Step 012 | Loss 3.7147 | Elasped 0:00:20 | ETA 0:09:27
+2023-10-16 12:24:31,567 - Train Epoch 002 | Step 013 | Loss 3.7647 | Elasped 0:00:20 | ETA 0:09:24
+2023-10-16 12:24:32,201 - Train Epoch 002 | Step 014 | Loss 3.7078 | Elasped 0:00:21 | ETA 0:09:23
+2023-10-16 12:24:32,809 - Train Epoch 002 | Step 015 | Loss 3.7734 | Elasped 0:00:22 | ETA 0:09:21
+2023-10-16 12:24:33,412 - Train Epoch 002 | Step 016 | Loss 3.7768 | Elasped 0:00:22 | ETA 0:09:19
+2023-10-16 12:24:33,961 - Train Epoch 002 | Step 017 | Loss 3.5319 | Elasped 0:00:23 | ETA 0:09:16
+2023-10-16 12:24:34,546 - Train Epoch 003 | Step 000 | Loss 3.6266 | Elasped 0:00:23 | ETA 0:09:14
+2023-10-16 12:24:35,268 - Train Epoch 003 | Step 001 | Loss 3.6307 | Elasped 0:00:24 | ETA 0:09:15
+2023-10-16 12:24:35,841 - Train Epoch 003 | Step 002 | Loss 3.7357 | Elasped 0:00:25 | ETA 0:09:13
+2023-10-16 12:24:36,410 - Train Epoch 003 | Step 003 | Loss 3.6626 | Elasped 0:00:25 | ETA 0:09:11
+2023-10-16 12:24:37,048 - Train Epoch 003 | Step 004 | Loss 3.6407 | Elasped 0:00:26 | ETA 0:09:10
+2023-10-16 12:24:37,629 - Train Epoch 003 | Step 005 | Loss 3.5988 | Elasped 0:00:26 | ETA 0:09:08
+2023-10-16 12:24:38,295 - Train Epoch 003 | Step 006 | Loss 3.6295 | Elasped 0:00:27 | ETA 0:09:08
+2023-10-16 12:24:38,853 - Train Epoch 003 | Step 007 | Loss 3.5306 | Elasped 0:00:28 | ETA 0:09:06
+2023-10-16 12:24:39,471 - Train Epoch 003 | Step 008 | Loss 3.5764 | Elasped 0:00:28 | ETA 0:09:05
+2023-10-16 12:24:40,106 - Train Epoch 003 | Step 009 | Loss 3.5043 | Elasped 0:00:29 | ETA 0:09:04
+2023-10-16 12:24:40,682 - Train Epoch 003 | Step 010 | Loss 3.3798 | Elasped 0:00:29 | ETA 0:09:02
+2023-10-16 12:24:41,279 - Train Epoch 003 | Step 011 | Loss 3.5692 | Elasped 0:00:30 | ETA 0:09:01
+2023-10-16 12:24:41,917 - Train Epoch 003 | Step 012 | Loss 3.5162 | Elasped 0:00:31 | ETA 0:09:01
+2023-10-16 12:24:42,538 - Train Epoch 003 | Step 013 | Loss 3.4326 | Elasped 0:00:31 | ETA 0:09:00
+2023-10-16 12:24:43,154 - Train Epoch 003 | Step 014 | Loss 3.4477 | Elasped 0:00:32 | ETA 0:08:59
+2023-10-16 12:24:43,768 - Train Epoch 003 | Step 015 | Loss 3.5460 | Elasped 0:00:33 | ETA 0:08:58
+2023-10-16 12:24:44,331 - Train Epoch 003 | Step 016 | Loss 3.4484 | Elasped 0:00:33 | ETA 0:08:56
+2023-10-16 12:24:44,988 - Train Epoch 003 | Step 017 | Loss 3.4068 | Elasped 0:00:34 | ETA 0:08:56
+2023-10-16 12:24:45,513 - Train Epoch 004 | Step 000 | Loss 3.3221 | Elasped 0:00:34 | ETA 0:08:53
+2023-10-16 12:24:46,110 - Train Epoch 004 | Step 001 | Loss 3.4707 | Elasped 0:00:35 | ETA 0:08:52
+2023-10-16 12:24:46,758 - Train Epoch 004 | Step 002 | Loss 3.4943 | Elasped 0:00:35 | ETA 0:08:52
+2023-10-16 12:24:47,352 - Train Epoch 004 | Step 003 | Loss 3.3800 | Elasped 0:00:36 | ETA 0:08:51
+2023-10-16 12:24:47,971 - Train Epoch 004 | Step 004 | Loss 3.3695 | Elasped 0:00:37 | ETA 0:08:50
+2023-10-16 12:24:48,544 - Train Epoch 004 | Step 005 | Loss 3.3255 | Elasped 0:00:37 | ETA 0:08:48
+2023-10-16 12:24:49,135 - Train Epoch 004 | Step 006 | Loss 3.3191 | Elasped 0:00:38 | ETA 0:08:47
+2023-10-16 12:24:49,801 - Train Epoch 004 | Step 007 | Loss 3.1985 | Elasped 0:00:39 | ETA 0:08:47
+2023-10-16 12:24:50,383 - Train Epoch 004 | Step 008 | Loss 3.2590 | Elasped 0:00:39 | ETA 0:08:46
+2023-10-16 12:24:51,067 - Train Epoch 004 | Step 009 | Loss 3.3639 | Elasped 0:00:40 | ETA 0:08:46
+2023-10-16 12:24:51,647 - Train Epoch 004 | Step 010 | Loss 3.1989 | Elasped 0:00:40 | ETA 0:08:45
+2023-10-16 12:24:52,251 - Train Epoch 004 | Step 011 | Loss 3.3012 | Elasped 0:00:41 | ETA 0:08:44
+2023-10-16 12:24:52,896 - Train Epoch 004 | Step 012 | Loss 3.1967 | Elasped 0:00:42 | ETA 0:08:43
+2023-10-16 12:24:53,534 - Train Epoch 004 | Step 013 | Loss 3.2726 | Elasped 0:00:42 | ETA 0:08:43
+2023-10-16 12:24:54,176 - Train Epoch 004 | Step 014 | Loss 3.1879 | Elasped 0:00:43 | ETA 0:08:42
+2023-10-16 12:24:54,834 - Train Epoch 004 | Step 015 | Loss 3.1991 | Elasped 0:00:44 | ETA 0:08:42
+2023-10-16 12:24:55,407 - Train Epoch 004 | Step 016 | Loss 3.1353 | Elasped 0:00:44 | ETA 0:08:41
+2023-10-16 12:24:55,997 - Train Epoch 004 | Step 017 | Loss 3.2801 | Elasped 0:00:45 | ETA 0:08:40
+2023-10-16 12:24:56,618 - Train Epoch 005 | Step 000 | Loss 3.2609 | Elasped 0:00:45 | ETA 0:08:39
+2023-10-16 12:24:57,198 - Train Epoch 005 | Step 001 | Loss 3.0740 | Elasped 0:00:46 | ETA 0:08:38
+2023-10-16 12:24:57,821 - Train Epoch 005 | Step 002 | Loss 3.3502 | Elasped 0:00:47 | ETA 0:08:37
+2023-10-16 12:24:58,390 - Train Epoch 005 | Step 003 | Loss 3.1850 | Elasped 0:00:47 | ETA 0:08:36
+2023-10-16 12:24:59,035 - Train Epoch 005 | Step 004 | Loss 3.1881 | Elasped 0:00:48 | ETA 0:08:35
+2023-10-16 12:24:59,684 - Train Epoch 005 | Step 005 | Loss 3.0946 | Elasped 0:00:48 | ETA 0:08:35
+2023-10-16 12:25:00,296 - Train Epoch 005 | Step 006 | Loss 3.1939 | Elasped 0:00:49 | ETA 0:08:34
+2023-10-16 12:25:00,912 - Train Epoch 005 | Step 007 | Loss 3.1115 | Elasped 0:00:50 | ETA 0:08:33
+2023-10-16 12:25:01,554 - Train Epoch 005 | Step 008 | Loss 3.0567 | Elasped 0:00:50 | ETA 0:08:33
+2023-10-16 12:25:02,143 - Train Epoch 005 | Step 009 | Loss 3.1684 | Elasped 0:00:51 | ETA 0:08:32
+2023-10-16 12:25:02,722 - Train Epoch 005 | Step 010 | Loss 2.9457 | Elasped 0:00:51 | ETA 0:08:31
+2023-10-16 12:25:03,348 - Train Epoch 005 | Step 011 | Loss 3.0124 | Elasped 0:00:52 | ETA 0:08:30
+2023-10-16 12:25:04,001 - Train Epoch 005 | Step 012 | Loss 3.0570 | Elasped 0:00:53 | ETA 0:08:30
+2023-10-16 12:25:04,673 - Train Epoch 005 | Step 013 | Loss 2.9962 | Elasped 0:00:53 | ETA 0:08:30
+2023-10-16 12:25:05,270 - Train Epoch 005 | Step 014 | Loss 3.1391 | Elasped 0:00:54 | ETA 0:08:29
+2023-10-16 12:25:05,854 - Train Epoch 005 | Step 015 | Loss 2.8775 | Elasped 0:00:55 | ETA 0:08:28
+2023-10-16 12:25:06,517 - Train Epoch 005 | Step 016 | Loss 3.0394 | Elasped 0:00:55 | ETA 0:08:28
+2023-10-16 12:25:07,097 - Train Epoch 005 | Step 017 | Loss 2.9500 | Elasped 0:00:56 | ETA 0:08:26
+2023-10-16 12:25:08,282 -  Test Epoch 005 | BIL-backbone | KNN Acc: 72.31% | Best Acc 72.31% at epoch 5 
+2023-10-16 12:25:09,177 -  Test Epoch 005 | JM-backbone | KNN Acc: 58.67% | Best Acc 58.67% at epoch 5 
+2023-10-16 12:25:09,796 -  Test Epoch 005 | ACT-backbone | KNN Acc: 47.37% | Best Acc 47.37% at epoch 5 
+2023-10-16 12:25:10,967 -  Test Epoch 005 | BIL-full | KNN Acc: 68.60% | Best Acc 68.60% at epoch 5 
+2023-10-16 12:25:11,857 -  Test Epoch 005 | JM-full | KNN Acc: 52.00% | Best Acc 52.00% at epoch 5 
+2023-10-16 12:25:12,470 -  Test Epoch 005 | ACT-full | KNN Acc: 50.53% | Best Acc 50.53% at epoch 5 
+2023-10-16 12:25:13,105 - Train Epoch 006 | Step 000 | Loss 2.9122 | Elasped 0:01:02 | ETA 0:09:14
+2023-10-16 12:25:13,753 - Train Epoch 006 | Step 001 | Loss 2.8551 | Elasped 0:01:02 | ETA 0:09:13
+2023-10-16 12:25:14,322 - Train Epoch 006 | Step 002 | Loss 2.9025 | Elasped 0:01:03 | ETA 0:09:11
+2023-10-16 12:25:14,948 - Train Epoch 006 | Step 003 | Loss 2.9324 | Elasped 0:01:04 | ETA 0:09:10
+2023-10-16 12:25:15,511 - Train Epoch 006 | Step 004 | Loss 2.9415 | Elasped 0:01:04 | ETA 0:09:08
+2023-10-16 12:25:16,076 - Train Epoch 006 | Step 005 | Loss 3.0377 | Elasped 0:01:05 | ETA 0:09:06
+2023-10-16 12:25:16,737 - Train Epoch 006 | Step 006 | Loss 2.8149 | Elasped 0:01:05 | ETA 0:09:06
+2023-10-16 12:25:17,336 - Train Epoch 006 | Step 007 | Loss 2.8675 | Elasped 0:01:06 | ETA 0:09:04
+2023-10-16 12:25:17,919 - Train Epoch 006 | Step 008 | Loss 2.7877 | Elasped 0:01:07 | ETA 0:09:03
+2023-10-16 12:25:18,575 - Train Epoch 006 | Step 009 | Loss 2.8435 | Elasped 0:01:07 | ETA 0:09:02
+2023-10-16 12:25:19,157 - Train Epoch 006 | Step 010 | Loss 2.8832 | Elasped 0:01:08 | ETA 0:09:01
+2023-10-16 12:25:19,729 - Train Epoch 006 | Step 011 | Loss 2.8062 | Elasped 0:01:08 | ETA 0:08:59
+2023-10-16 12:25:20,398 - Train Epoch 006 | Step 012 | Loss 2.8639 | Elasped 0:01:09 | ETA 0:08:58
+2023-10-16 12:25:21,026 - Train Epoch 006 | Step 013 | Loss 2.9485 | Elasped 0:01:10 | ETA 0:08:57
+2023-10-16 12:25:21,690 - Train Epoch 006 | Step 014 | Loss 2.7927 | Elasped 0:01:10 | ETA 0:08:57
+2023-10-16 12:25:22,262 - Train Epoch 006 | Step 015 | Loss 2.9468 | Elasped 0:01:11 | ETA 0:08:55
+2023-10-16 12:25:22,921 - Train Epoch 006 | Step 016 | Loss 2.7221 | Elasped 0:01:12 | ETA 0:08:54
+2023-10-16 12:25:23,573 - Train Epoch 006 | Step 017 | Loss 2.6512 | Elasped 0:01:12 | ETA 0:08:53
+2023-10-16 12:25:24,160 - Train Epoch 007 | Step 000 | Loss 2.7488 | Elasped 0:01:13 | ETA 0:08:52
+2023-10-16 12:25:24,733 - Train Epoch 007 | Step 001 | Loss 2.8370 | Elasped 0:01:13 | ETA 0:08:51
+2023-10-16 12:25:25,422 - Train Epoch 007 | Step 002 | Loss 2.7429 | Elasped 0:01:14 | ETA 0:08:50
+2023-10-16 12:25:26,019 - Train Epoch 007 | Step 003 | Loss 2.9628 | Elasped 0:01:15 | ETA 0:08:49
+2023-10-16 12:25:26,580 - Train Epoch 007 | Step 004 | Loss 2.7088 | Elasped 0:01:15 | ETA 0:08:48
+2023-10-16 12:25:27,297 - Train Epoch 007 | Step 005 | Loss 2.7441 | Elasped 0:01:16 | ETA 0:08:47
+2023-10-16 12:25:27,925 - Train Epoch 007 | Step 006 | Loss 2.7881 | Elasped 0:01:17 | ETA 0:08:46
+2023-10-16 12:25:28,573 - Train Epoch 007 | Step 007 | Loss 2.5663 | Elasped 0:01:17 | ETA 0:08:45
+2023-10-16 12:25:29,126 - Train Epoch 007 | Step 008 | Loss 2.7836 | Elasped 0:01:18 | ETA 0:08:44
+2023-10-16 12:25:29,718 - Train Epoch 007 | Step 009 | Loss 2.7338 | Elasped 0:01:18 | ETA 0:08:43
+2023-10-16 12:25:30,392 - Train Epoch 007 | Step 010 | Loss 2.6615 | Elasped 0:01:19 | ETA 0:08:42
+2023-10-16 12:25:30,997 - Train Epoch 007 | Step 011 | Loss 2.6300 | Elasped 0:01:20 | ETA 0:08:41
+2023-10-16 12:25:31,599 - Train Epoch 007 | Step 012 | Loss 2.6437 | Elasped 0:01:20 | ETA 0:08:40
+2023-10-16 12:25:32,250 - Train Epoch 007 | Step 013 | Loss 2.5993 | Elasped 0:01:21 | ETA 0:08:39
+2023-10-16 12:25:32,814 - Train Epoch 007 | Step 014 | Loss 2.6008 | Elasped 0:01:22 | ETA 0:08:38
+2023-10-16 12:25:33,399 - Train Epoch 007 | Step 015 | Loss 2.6633 | Elasped 0:01:22 | ETA 0:08:37
+2023-10-16 12:25:34,056 - Train Epoch 007 | Step 016 | Loss 2.4052 | Elasped 0:01:23 | ETA 0:08:36
+2023-10-16 12:25:34,652 - Train Epoch 007 | Step 017 | Loss 2.6927 | Elasped 0:01:23 | ETA 0:08:35
+2023-10-16 12:25:35,251 - Train Epoch 008 | Step 000 | Loss 2.5852 | Elasped 0:01:24 | ETA 0:08:34
+2023-10-16 12:25:35,952 - Train Epoch 008 | Step 001 | Loss 2.8764 | Elasped 0:01:25 | ETA 0:08:33
+2023-10-16 12:25:36,565 - Train Epoch 008 | Step 002 | Loss 2.6780 | Elasped 0:01:25 | ETA 0:08:32
+2023-10-16 12:25:37,177 - Train Epoch 008 | Step 003 | Loss 2.5727 | Elasped 0:01:26 | ETA 0:08:31
+2023-10-16 12:25:37,830 - Train Epoch 008 | Step 004 | Loss 2.6039 | Elasped 0:01:27 | ETA 0:08:31
+2023-10-16 12:25:38,433 - Train Epoch 008 | Step 005 | Loss 2.6423 | Elasped 0:01:27 | ETA 0:08:30
+2023-10-16 12:25:39,025 - Train Epoch 008 | Step 006 | Loss 2.4846 | Elasped 0:01:28 | ETA 0:08:28
+2023-10-16 12:25:39,681 - Train Epoch 008 | Step 007 | Loss 2.6119 | Elasped 0:01:28 | ETA 0:08:28
+2023-10-16 12:25:40,254 - Train Epoch 008 | Step 008 | Loss 2.5382 | Elasped 0:01:29 | ETA 0:08:27
+2023-10-16 12:25:40,953 - Train Epoch 008 | Step 009 | Loss 2.4820 | Elasped 0:01:30 | ETA 0:08:26
+2023-10-16 12:25:41,547 - Train Epoch 008 | Step 010 | Loss 2.6127 | Elasped 0:01:30 | ETA 0:08:25
+2023-10-16 12:25:42,124 - Train Epoch 008 | Step 011 | Loss 2.5629 | Elasped 0:01:31 | ETA 0:08:24
+2023-10-16 12:25:42,735 - Train Epoch 008 | Step 012 | Loss 2.5604 | Elasped 0:01:31 | ETA 0:08:23
+2023-10-16 12:25:43,341 - Train Epoch 008 | Step 013 | Loss 2.4774 | Elasped 0:01:32 | ETA 0:08:22
+2023-10-16 12:25:43,885 - Train Epoch 008 | Step 014 | Loss 2.5299 | Elasped 0:01:33 | ETA 0:08:21
+2023-10-16 12:25:44,546 - Train Epoch 008 | Step 015 | Loss 2.5339 | Elasped 0:01:33 | ETA 0:08:20
+2023-10-16 12:25:45,160 - Train Epoch 008 | Step 016 | Loss 2.5070 | Elasped 0:01:34 | ETA 0:08:19
+2023-10-16 12:25:45,773 - Train Epoch 008 | Step 017 | Loss 2.6033 | Elasped 0:01:35 | ETA 0:08:18
+2023-10-16 12:25:46,414 - Train Epoch 009 | Step 000 | Loss 2.6218 | Elasped 0:01:35 | ETA 0:08:18
+2023-10-16 12:25:47,056 - Train Epoch 009 | Step 001 | Loss 2.5355 | Elasped 0:01:36 | ETA 0:08:17
+2023-10-16 12:25:47,640 - Train Epoch 009 | Step 002 | Loss 2.4727 | Elasped 0:01:36 | ETA 0:08:16
+2023-10-16 12:25:48,258 - Train Epoch 009 | Step 003 | Loss 2.4398 | Elasped 0:01:37 | ETA 0:08:15
+2023-10-16 12:25:48,862 - Train Epoch 009 | Step 004 | Loss 2.5858 | Elasped 0:01:38 | ETA 0:08:14
+2023-10-16 12:25:49,457 - Train Epoch 009 | Step 005 | Loss 2.4747 | Elasped 0:01:38 | ETA 0:08:13
+2023-10-16 12:25:50,118 - Train Epoch 009 | Step 006 | Loss 2.3519 | Elasped 0:01:39 | ETA 0:08:12
+2023-10-16 12:25:50,714 - Train Epoch 009 | Step 007 | Loss 2.5229 | Elasped 0:01:39 | ETA 0:08:11
+2023-10-16 12:25:51,361 - Train Epoch 009 | Step 008 | Loss 2.5008 | Elasped 0:01:40 | ETA 0:08:11
+2023-10-16 12:25:52,006 - Train Epoch 009 | Step 009 | Loss 2.2079 | Elasped 0:01:41 | ETA 0:08:10
+2023-10-16 12:25:52,621 - Train Epoch 009 | Step 010 | Loss 2.5025 | Elasped 0:01:41 | ETA 0:08:09
+2023-10-16 12:25:53,203 - Train Epoch 009 | Step 011 | Loss 2.3511 | Elasped 0:01:42 | ETA 0:08:08
+2023-10-16 12:25:53,849 - Train Epoch 009 | Step 012 | Loss 2.4660 | Elasped 0:01:43 | ETA 0:08:07
+2023-10-16 12:25:54,437 - Train Epoch 009 | Step 013 | Loss 2.5942 | Elasped 0:01:43 | ETA 0:08:06
+2023-10-16 12:25:55,130 - Train Epoch 009 | Step 014 | Loss 2.4198 | Elasped 0:01:44 | ETA 0:08:06
+2023-10-16 12:25:55,726 - Train Epoch 009 | Step 015 | Loss 2.4979 | Elasped 0:01:44 | ETA 0:08:05
+2023-10-16 12:25:56,293 - Train Epoch 009 | Step 016 | Loss 2.3535 | Elasped 0:01:45 | ETA 0:08:04
+2023-10-16 12:25:56,957 - Train Epoch 009 | Step 017 | Loss 2.4719 | Elasped 0:01:46 | ETA 0:08:03
+2023-10-16 12:25:57,557 - Train Epoch 010 | Step 000 | Loss 2.4973 | Elasped 0:01:46 | ETA 0:08:02
+2023-10-16 12:25:58,169 - Train Epoch 010 | Step 001 | Loss 2.4840 | Elasped 0:01:47 | ETA 0:08:02
+2023-10-16 12:25:58,846 - Train Epoch 010 | Step 002 | Loss 2.3477 | Elasped 0:01:48 | ETA 0:08:01
+2023-10-16 12:25:59,466 - Train Epoch 010 | Step 003 | Loss 2.4843 | Elasped 0:01:48 | ETA 0:08:00
+2023-10-16 12:26:00,059 - Train Epoch 010 | Step 004 | Loss 2.3835 | Elasped 0:01:49 | ETA 0:07:59
+2023-10-16 12:26:00,750 - Train Epoch 010 | Step 005 | Loss 2.4048 | Elasped 0:01:49 | ETA 0:07:59
+2023-10-16 12:26:01,361 - Train Epoch 010 | Step 006 | Loss 2.3397 | Elasped 0:01:50 | ETA 0:07:58
+2023-10-16 12:26:01,922 - Train Epoch 010 | Step 007 | Loss 2.3139 | Elasped 0:01:51 | ETA 0:07:57
+2023-10-16 12:26:02,570 - Train Epoch 010 | Step 008 | Loss 2.3459 | Elasped 0:01:51 | ETA 0:07:56
+2023-10-16 12:26:03,202 - Train Epoch 010 | Step 009 | Loss 2.3956 | Elasped 0:01:52 | ETA 0:07:55
+2023-10-16 12:26:03,837 - Train Epoch 010 | Step 010 | Loss 2.0314 | Elasped 0:01:53 | ETA 0:07:55
+2023-10-16 12:26:04,447 - Train Epoch 010 | Step 011 | Loss 2.2338 | Elasped 0:01:53 | ETA 0:07:54
+2023-10-16 12:26:05,043 - Train Epoch 010 | Step 012 | Loss 2.2171 | Elasped 0:01:54 | ETA 0:07:53
+2023-10-16 12:26:05,679 - Train Epoch 010 | Step 013 | Loss 2.2669 | Elasped 0:01:54 | ETA 0:07:52
+2023-10-16 12:26:06,283 - Train Epoch 010 | Step 014 | Loss 2.2976 | Elasped 0:01:55 | ETA 0:07:51
+2023-10-16 12:26:06,849 - Train Epoch 010 | Step 015 | Loss 2.3851 | Elasped 0:01:56 | ETA 0:07:50
+2023-10-16 12:26:07,523 - Train Epoch 010 | Step 016 | Loss 2.1584 | Elasped 0:01:56 | ETA 0:07:50
+2023-10-16 12:26:08,117 - Train Epoch 010 | Step 017 | Loss 2.1970 | Elasped 0:01:57 | ETA 0:07:49
+2023-10-16 12:26:09,295 -  Test Epoch 010 | BIL-backbone | KNN Acc: 70.66% | Best Acc 72.31% at epoch 5 
+2023-10-16 12:26:10,180 -  Test Epoch 010 | JM-backbone | KNN Acc: 61.33% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:26:10,795 -  Test Epoch 010 | ACT-backbone | KNN Acc: 51.58% | Best Acc 51.58% at epoch 10 
+2023-10-16 12:26:11,983 -  Test Epoch 010 | BIL-full | KNN Acc: 71.07% | Best Acc 71.07% at epoch 10 
+2023-10-16 12:26:12,867 -  Test Epoch 010 | JM-full | KNN Acc: 58.67% | Best Acc 58.67% at epoch 10 
+2023-10-16 12:26:13,481 -  Test Epoch 010 | ACT-full | KNN Acc: 54.74% | Best Acc 54.74% at epoch 10 
+2023-10-16 12:26:14,118 - Train Epoch 011 | Step 000 | Loss 2.3070 | Elasped 0:02:03 | ETA 0:08:10
+2023-10-16 12:26:14,739 - Train Epoch 011 | Step 001 | Loss 2.3474 | Elasped 0:02:03 | ETA 0:08:09
+2023-10-16 12:26:15,370 - Train Epoch 011 | Step 002 | Loss 2.3950 | Elasped 0:02:04 | ETA 0:08:08
+2023-10-16 12:26:16,019 - Train Epoch 011 | Step 003 | Loss 2.3140 | Elasped 0:02:05 | ETA 0:08:07
+2023-10-16 12:26:16,613 - Train Epoch 011 | Step 004 | Loss 2.3258 | Elasped 0:02:05 | ETA 0:08:06
+2023-10-16 12:26:17,233 - Train Epoch 011 | Step 005 | Loss 2.1198 | Elasped 0:02:06 | ETA 0:08:05
+2023-10-16 12:26:17,890 - Train Epoch 011 | Step 006 | Loss 2.0351 | Elasped 0:02:07 | ETA 0:08:04
+2023-10-16 12:26:18,471 - Train Epoch 011 | Step 007 | Loss 2.3568 | Elasped 0:02:07 | ETA 0:08:03
+2023-10-16 12:26:19,061 - Train Epoch 011 | Step 008 | Loss 2.4787 | Elasped 0:02:08 | ETA 0:08:02
+2023-10-16 12:26:19,713 - Train Epoch 011 | Step 009 | Loss 2.1355 | Elasped 0:02:08 | ETA 0:08:01
+2023-10-16 12:26:20,295 - Train Epoch 011 | Step 010 | Loss 2.3662 | Elasped 0:02:09 | ETA 0:08:00
+2023-10-16 12:26:20,886 - Train Epoch 011 | Step 011 | Loss 2.2898 | Elasped 0:02:10 | ETA 0:07:59
+2023-10-16 12:26:21,553 - Train Epoch 011 | Step 012 | Loss 2.2232 | Elasped 0:02:10 | ETA 0:07:59
+2023-10-16 12:26:22,174 - Train Epoch 011 | Step 013 | Loss 2.1446 | Elasped 0:02:11 | ETA 0:07:58
+2023-10-16 12:26:22,851 - Train Epoch 011 | Step 014 | Loss 2.2275 | Elasped 0:02:12 | ETA 0:07:57
+2023-10-16 12:26:23,474 - Train Epoch 011 | Step 015 | Loss 2.1798 | Elasped 0:02:12 | ETA 0:07:56
+2023-10-16 12:26:24,047 - Train Epoch 011 | Step 016 | Loss 2.2642 | Elasped 0:02:13 | ETA 0:07:55
+2023-10-16 12:26:24,693 - Train Epoch 011 | Step 017 | Loss 2.1670 | Elasped 0:02:13 | ETA 0:07:54
+2023-10-16 12:26:25,301 - Train Epoch 012 | Step 000 | Loss 2.3539 | Elasped 0:02:14 | ETA 0:07:53
+2023-10-16 12:26:25,879 - Train Epoch 012 | Step 001 | Loss 2.3090 | Elasped 0:02:15 | ETA 0:07:52
+2023-10-16 12:26:26,489 - Train Epoch 012 | Step 002 | Loss 2.2384 | Elasped 0:02:15 | ETA 0:07:51
+2023-10-16 12:26:27,100 - Train Epoch 012 | Step 003 | Loss 2.1761 | Elasped 0:02:16 | ETA 0:07:51
+2023-10-16 12:26:27,711 - Train Epoch 012 | Step 004 | Loss 2.1548 | Elasped 0:02:16 | ETA 0:07:50
+2023-10-16 12:26:28,400 - Train Epoch 012 | Step 005 | Loss 2.1396 | Elasped 0:02:17 | ETA 0:07:49
+2023-10-16 12:26:29,002 - Train Epoch 012 | Step 006 | Loss 2.2126 | Elasped 0:02:18 | ETA 0:07:48
+2023-10-16 12:26:29,665 - Train Epoch 012 | Step 007 | Loss 2.1292 | Elasped 0:02:18 | ETA 0:07:47
+2023-10-16 12:26:30,288 - Train Epoch 012 | Step 008 | Loss 1.7100 | Elasped 0:02:19 | ETA 0:07:47
+2023-10-16 12:26:30,894 - Train Epoch 012 | Step 009 | Loss 2.0835 | Elasped 0:02:20 | ETA 0:07:46
+2023-10-16 12:26:31,579 - Train Epoch 012 | Step 010 | Loss 2.1488 | Elasped 0:02:20 | ETA 0:07:45
+2023-10-16 12:26:32,151 - Train Epoch 012 | Step 011 | Loss 2.2407 | Elasped 0:02:21 | ETA 0:07:44
+2023-10-16 12:26:32,823 - Train Epoch 012 | Step 012 | Loss 2.2643 | Elasped 0:02:22 | ETA 0:07:43
+2023-10-16 12:26:33,464 - Train Epoch 012 | Step 013 | Loss 2.1482 | Elasped 0:02:22 | ETA 0:07:43
+2023-10-16 12:26:34,086 - Train Epoch 012 | Step 014 | Loss 2.1294 | Elasped 0:02:23 | ETA 0:07:42
+2023-10-16 12:26:34,737 - Train Epoch 012 | Step 015 | Loss 2.0892 | Elasped 0:02:23 | ETA 0:07:41
+2023-10-16 12:26:35,334 - Train Epoch 012 | Step 016 | Loss 2.0714 | Elasped 0:02:24 | ETA 0:07:40
+2023-10-16 12:26:35,917 - Train Epoch 012 | Step 017 | Loss 2.0494 | Elasped 0:02:25 | ETA 0:07:39
+2023-10-16 12:26:36,617 - Train Epoch 013 | Step 000 | Loss 2.1148 | Elasped 0:02:25 | ETA 0:07:39
+2023-10-16 12:26:37,261 - Train Epoch 013 | Step 001 | Loss 2.0608 | Elasped 0:02:26 | ETA 0:07:38
+2023-10-16 12:26:37,840 - Train Epoch 013 | Step 002 | Loss 2.1689 | Elasped 0:02:27 | ETA 0:07:37
+2023-10-16 12:26:38,513 - Train Epoch 013 | Step 003 | Loss 2.0806 | Elasped 0:02:27 | ETA 0:07:36
+2023-10-16 12:26:39,140 - Train Epoch 013 | Step 004 | Loss 1.4645 | Elasped 0:02:28 | ETA 0:07:35
+2023-10-16 12:26:39,731 - Train Epoch 013 | Step 005 | Loss 2.2849 | Elasped 0:02:28 | ETA 0:07:34
+2023-10-16 12:26:40,420 - Train Epoch 013 | Step 006 | Loss 2.2888 | Elasped 0:02:29 | ETA 0:07:34
+2023-10-16 12:26:41,067 - Train Epoch 013 | Step 007 | Loss 2.2003 | Elasped 0:02:30 | ETA 0:07:33
+2023-10-16 12:26:41,731 - Train Epoch 013 | Step 008 | Loss 1.9842 | Elasped 0:02:30 | ETA 0:07:32
+2023-10-16 12:26:42,309 - Train Epoch 013 | Step 009 | Loss 2.0930 | Elasped 0:02:31 | ETA 0:07:31
+2023-10-16 12:26:42,905 - Train Epoch 013 | Step 010 | Loss 2.1554 | Elasped 0:02:32 | ETA 0:07:31
+2023-10-16 12:26:43,552 - Train Epoch 013 | Step 011 | Loss 1.9906 | Elasped 0:02:32 | ETA 0:07:30
+2023-10-16 12:26:44,133 - Train Epoch 013 | Step 012 | Loss 2.1371 | Elasped 0:02:33 | ETA 0:07:29
+2023-10-16 12:26:44,808 - Train Epoch 013 | Step 013 | Loss 2.0261 | Elasped 0:02:34 | ETA 0:07:28
+2023-10-16 12:26:45,451 - Train Epoch 013 | Step 014 | Loss 2.0941 | Elasped 0:02:34 | ETA 0:07:27
+2023-10-16 12:26:46,031 - Train Epoch 013 | Step 015 | Loss 2.0401 | Elasped 0:02:35 | ETA 0:07:27
+2023-10-16 12:26:46,634 - Train Epoch 013 | Step 016 | Loss 1.9969 | Elasped 0:02:35 | ETA 0:07:26
+2023-10-16 12:26:47,276 - Train Epoch 013 | Step 017 | Loss 2.1018 | Elasped 0:02:36 | ETA 0:07:25
+2023-10-16 12:26:47,901 - Train Epoch 014 | Step 000 | Loss 2.0004 | Elasped 0:02:37 | ETA 0:07:24
+2023-10-16 12:26:48,527 - Train Epoch 014 | Step 001 | Loss 2.1107 | Elasped 0:02:37 | ETA 0:07:23
+2023-10-16 12:26:49,212 - Train Epoch 014 | Step 002 | Loss 2.0378 | Elasped 0:02:38 | ETA 0:07:23
+2023-10-16 12:26:49,775 - Train Epoch 014 | Step 003 | Loss 1.9552 | Elasped 0:02:39 | ETA 0:07:22
+2023-10-16 12:26:50,381 - Train Epoch 014 | Step 004 | Loss 1.9474 | Elasped 0:02:39 | ETA 0:07:21
+2023-10-16 12:26:51,095 - Train Epoch 014 | Step 005 | Loss 2.0115 | Elasped 0:02:40 | ETA 0:07:20
+2023-10-16 12:26:51,696 - Train Epoch 014 | Step 006 | Loss 1.3273 | Elasped 0:02:40 | ETA 0:07:20
+2023-10-16 12:26:52,335 - Train Epoch 014 | Step 007 | Loss 2.0529 | Elasped 0:02:41 | ETA 0:07:19
+2023-10-16 12:26:52,900 - Train Epoch 014 | Step 008 | Loss 1.8740 | Elasped 0:02:42 | ETA 0:07:18
+2023-10-16 12:26:53,480 - Train Epoch 014 | Step 009 | Loss 2.0733 | Elasped 0:02:42 | ETA 0:07:17
+2023-10-16 12:26:54,151 - Train Epoch 014 | Step 010 | Loss 1.9077 | Elasped 0:02:43 | ETA 0:07:16
+2023-10-16 12:26:54,720 - Train Epoch 014 | Step 011 | Loss 1.8684 | Elasped 0:02:43 | ETA 0:07:15
+2023-10-16 12:26:55,322 - Train Epoch 014 | Step 012 | Loss 2.2143 | Elasped 0:02:44 | ETA 0:07:15
+2023-10-16 12:26:56,014 - Train Epoch 014 | Step 013 | Loss 2.1061 | Elasped 0:02:45 | ETA 0:07:14
+2023-10-16 12:26:56,678 - Train Epoch 014 | Step 014 | Loss 1.9708 | Elasped 0:02:45 | ETA 0:07:13
+2023-10-16 12:26:57,249 - Train Epoch 014 | Step 015 | Loss 1.9926 | Elasped 0:02:46 | ETA 0:07:12
+2023-10-16 12:26:57,878 - Train Epoch 014 | Step 016 | Loss 1.9691 | Elasped 0:02:47 | ETA 0:07:12
+2023-10-16 12:26:58,510 - Train Epoch 014 | Step 017 | Loss 2.1158 | Elasped 0:02:47 | ETA 0:07:11
+2023-10-16 12:26:59,175 - Train Epoch 015 | Step 000 | Loss 1.6936 | Elasped 0:02:48 | ETA 0:07:10
+2023-10-16 12:26:59,820 - Train Epoch 015 | Step 001 | Loss 2.1044 | Elasped 0:02:49 | ETA 0:07:09
+2023-10-16 12:27:00,415 - Train Epoch 015 | Step 002 | Loss 2.3016 | Elasped 0:02:49 | ETA 0:07:09
+2023-10-16 12:27:01,054 - Train Epoch 015 | Step 003 | Loss 2.0141 | Elasped 0:02:50 | ETA 0:07:08
+2023-10-16 12:27:01,700 - Train Epoch 015 | Step 004 | Loss 2.0389 | Elasped 0:02:50 | ETA 0:07:07
+2023-10-16 12:27:02,327 - Train Epoch 015 | Step 005 | Loss 2.0666 | Elasped 0:02:51 | ETA 0:07:06
+2023-10-16 12:27:02,971 - Train Epoch 015 | Step 006 | Loss 1.9617 | Elasped 0:02:52 | ETA 0:07:06
+2023-10-16 12:27:03,619 - Train Epoch 015 | Step 007 | Loss 1.9470 | Elasped 0:02:52 | ETA 0:07:05
+2023-10-16 12:27:04,214 - Train Epoch 015 | Step 008 | Loss 1.9465 | Elasped 0:02:53 | ETA 0:07:04
+2023-10-16 12:27:04,846 - Train Epoch 015 | Step 009 | Loss 1.9690 | Elasped 0:02:54 | ETA 0:07:03
+2023-10-16 12:27:05,425 - Train Epoch 015 | Step 010 | Loss 1.9129 | Elasped 0:02:54 | ETA 0:07:03
+2023-10-16 12:27:06,038 - Train Epoch 015 | Step 011 | Loss 1.8668 | Elasped 0:02:55 | ETA 0:07:02
+2023-10-16 12:27:06,720 - Train Epoch 015 | Step 012 | Loss 1.4817 | Elasped 0:02:55 | ETA 0:07:01
+2023-10-16 12:27:07,352 - Train Epoch 015 | Step 013 | Loss 1.8545 | Elasped 0:02:56 | ETA 0:07:00
+2023-10-16 12:27:07,936 - Train Epoch 015 | Step 014 | Loss 2.0921 | Elasped 0:02:57 | ETA 0:07:00
+2023-10-16 12:27:08,594 - Train Epoch 015 | Step 015 | Loss 1.8717 | Elasped 0:02:57 | ETA 0:06:59
+2023-10-16 12:27:09,166 - Train Epoch 015 | Step 016 | Loss 1.8660 | Elasped 0:02:58 | ETA 0:06:58
+2023-10-16 12:27:09,820 - Train Epoch 015 | Step 017 | Loss 1.7792 | Elasped 0:02:59 | ETA 0:06:57
+2023-10-16 12:27:10,995 -  Test Epoch 015 | BIL-backbone | KNN Acc: 73.14% | Best Acc 73.14% at epoch 15 
+2023-10-16 12:27:11,895 -  Test Epoch 015 | JM-backbone | KNN Acc: 58.67% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:27:12,521 -  Test Epoch 015 | ACT-backbone | KNN Acc: 49.47% | Best Acc 51.58% at epoch 10 
+2023-10-16 12:27:13,703 -  Test Epoch 015 | BIL-full | KNN Acc: 73.55% | Best Acc 73.55% at epoch 15 
+2023-10-16 12:27:14,600 -  Test Epoch 015 | JM-full | KNN Acc: 60.00% | Best Acc 60.00% at epoch 15 
+2023-10-16 12:27:15,229 -  Test Epoch 015 | ACT-full | KNN Acc: 54.74% | Best Acc 54.74% at epoch 10 
+2023-10-16 12:27:15,877 - Train Epoch 016 | Step 000 | Loss 1.9007 | Elasped 0:03:05 | ETA 0:07:09
+2023-10-16 12:27:16,442 - Train Epoch 016 | Step 001 | Loss 1.9905 | Elasped 0:03:05 | ETA 0:07:08
+2023-10-16 12:27:17,045 - Train Epoch 016 | Step 002 | Loss 1.9087 | Elasped 0:03:06 | ETA 0:07:07
+2023-10-16 12:27:17,686 - Train Epoch 016 | Step 003 | Loss 1.9245 | Elasped 0:03:06 | ETA 0:07:07
+2023-10-16 12:27:18,268 - Train Epoch 016 | Step 004 | Loss 1.0699 | Elasped 0:03:07 | ETA 0:07:06
+2023-10-16 12:27:18,893 - Train Epoch 016 | Step 005 | Loss 1.8000 | Elasped 0:03:08 | ETA 0:07:05
+2023-10-16 12:27:19,522 - Train Epoch 016 | Step 006 | Loss 1.8374 | Elasped 0:03:08 | ETA 0:07:04
+2023-10-16 12:27:20,107 - Train Epoch 016 | Step 007 | Loss 1.8639 | Elasped 0:03:09 | ETA 0:07:03
+2023-10-16 12:27:20,802 - Train Epoch 016 | Step 008 | Loss 1.8022 | Elasped 0:03:10 | ETA 0:07:02
+2023-10-16 12:27:21,407 - Train Epoch 016 | Step 009 | Loss 1.5452 | Elasped 0:03:10 | ETA 0:07:02
+2023-10-16 12:27:22,005 - Train Epoch 016 | Step 010 | Loss 1.7473 | Elasped 0:03:11 | ETA 0:07:01
+2023-10-16 12:27:22,661 - Train Epoch 016 | Step 011 | Loss 1.5742 | Elasped 0:03:11 | ETA 0:07:00
+2023-10-16 12:27:23,273 - Train Epoch 016 | Step 012 | Loss 1.6836 | Elasped 0:03:12 | ETA 0:06:59
+2023-10-16 12:27:23,922 - Train Epoch 016 | Step 013 | Loss 1.7672 | Elasped 0:03:13 | ETA 0:06:58
+2023-10-16 12:27:24,598 - Train Epoch 016 | Step 014 | Loss 1.7067 | Elasped 0:03:13 | ETA 0:06:58
+2023-10-16 12:27:25,243 - Train Epoch 016 | Step 015 | Loss 1.7763 | Elasped 0:03:14 | ETA 0:06:57
+2023-10-16 12:27:25,881 - Train Epoch 016 | Step 016 | Loss 1.7296 | Elasped 0:03:15 | ETA 0:06:56
+2023-10-16 12:27:26,549 - Train Epoch 016 | Step 017 | Loss 1.8000 | Elasped 0:03:15 | ETA 0:06:56
+2023-10-16 12:27:27,150 - Train Epoch 017 | Step 000 | Loss 1.9608 | Elasped 0:03:16 | ETA 0:06:55
+2023-10-16 12:27:27,754 - Train Epoch 017 | Step 001 | Loss 1.6918 | Elasped 0:03:16 | ETA 0:06:54
+2023-10-16 12:27:28,396 - Train Epoch 017 | Step 002 | Loss 1.8444 | Elasped 0:03:17 | ETA 0:06:53
+2023-10-16 12:27:29,020 - Train Epoch 017 | Step 003 | Loss 1.8238 | Elasped 0:03:18 | ETA 0:06:52
+2023-10-16 12:27:29,636 - Train Epoch 017 | Step 004 | Loss 1.8364 | Elasped 0:03:18 | ETA 0:06:51
+2023-10-16 12:27:30,303 - Train Epoch 017 | Step 005 | Loss 1.8482 | Elasped 0:03:19 | ETA 0:06:51
+2023-10-16 12:27:30,903 - Train Epoch 017 | Step 006 | Loss 1.8217 | Elasped 0:03:20 | ETA 0:06:50
+2023-10-16 12:27:31,506 - Train Epoch 017 | Step 007 | Loss 1.7904 | Elasped 0:03:20 | ETA 0:06:49
+2023-10-16 12:27:32,142 - Train Epoch 017 | Step 008 | Loss 1.8213 | Elasped 0:03:21 | ETA 0:06:48
+2023-10-16 12:27:32,760 - Train Epoch 017 | Step 009 | Loss 1.6839 | Elasped 0:03:21 | ETA 0:06:48
+2023-10-16 12:27:33,408 - Train Epoch 017 | Step 010 | Loss 1.6109 | Elasped 0:03:22 | ETA 0:06:47
+2023-10-16 12:27:34,126 - Train Epoch 017 | Step 011 | Loss 1.6057 | Elasped 0:03:23 | ETA 0:06:46
+2023-10-16 12:27:34,765 - Train Epoch 017 | Step 012 | Loss 1.6442 | Elasped 0:03:23 | ETA 0:06:45
+2023-10-16 12:27:35,450 - Train Epoch 017 | Step 013 | Loss 1.6969 | Elasped 0:03:24 | ETA 0:06:45
+2023-10-16 12:27:36,084 - Train Epoch 017 | Step 014 | Loss 1.7365 | Elasped 0:03:25 | ETA 0:06:44
+2023-10-16 12:27:36,674 - Train Epoch 017 | Step 015 | Loss 1.6655 | Elasped 0:03:25 | ETA 0:06:43
+2023-10-16 12:27:37,332 - Train Epoch 017 | Step 016 | Loss 1.6557 | Elasped 0:03:26 | ETA 0:06:42
+2023-10-16 12:27:37,957 - Train Epoch 017 | Step 017 | Loss 1.8855 | Elasped 0:03:27 | ETA 0:06:42
+2023-10-16 12:27:38,535 - Train Epoch 018 | Step 000 | Loss 1.8911 | Elasped 0:03:27 | ETA 0:06:41
+2023-10-16 12:27:39,183 - Train Epoch 018 | Step 001 | Loss 1.8804 | Elasped 0:03:28 | ETA 0:06:40
+2023-10-16 12:27:39,785 - Train Epoch 018 | Step 002 | Loss 1.9180 | Elasped 0:03:29 | ETA 0:06:39
+2023-10-16 12:27:40,401 - Train Epoch 018 | Step 003 | Loss 1.8306 | Elasped 0:03:29 | ETA 0:06:38
+2023-10-16 12:27:41,062 - Train Epoch 018 | Step 004 | Loss 1.7639 | Elasped 0:03:30 | ETA 0:06:38
+2023-10-16 12:27:41,672 - Train Epoch 018 | Step 005 | Loss 1.8305 | Elasped 0:03:30 | ETA 0:06:37
+2023-10-16 12:27:42,385 - Train Epoch 018 | Step 006 | Loss 1.9514 | Elasped 0:03:31 | ETA 0:06:36
+2023-10-16 12:27:42,964 - Train Epoch 018 | Step 007 | Loss 1.5144 | Elasped 0:03:32 | ETA 0:06:36
+2023-10-16 12:27:43,578 - Train Epoch 018 | Step 008 | Loss 1.6871 | Elasped 0:03:32 | ETA 0:06:35
+2023-10-16 12:27:44,248 - Train Epoch 018 | Step 009 | Loss 1.8228 | Elasped 0:03:33 | ETA 0:06:34
+2023-10-16 12:27:44,803 - Train Epoch 018 | Step 010 | Loss 1.7084 | Elasped 0:03:34 | ETA 0:06:33
+2023-10-16 12:27:45,415 - Train Epoch 018 | Step 011 | Loss 1.0367 | Elasped 0:03:34 | ETA 0:06:32
+2023-10-16 12:27:46,058 - Train Epoch 018 | Step 012 | Loss 1.8109 | Elasped 0:03:35 | ETA 0:06:32
+2023-10-16 12:27:46,686 - Train Epoch 018 | Step 013 | Loss 1.7993 | Elasped 0:03:35 | ETA 0:06:31
+2023-10-16 12:27:47,353 - Train Epoch 018 | Step 014 | Loss 1.4625 | Elasped 0:03:36 | ETA 0:06:30
+2023-10-16 12:27:48,038 - Train Epoch 018 | Step 015 | Loss 1.4818 | Elasped 0:03:37 | ETA 0:06:30
+2023-10-16 12:27:48,697 - Train Epoch 018 | Step 016 | Loss 1.5022 | Elasped 0:03:37 | ETA 0:06:29
+2023-10-16 12:27:49,304 - Train Epoch 018 | Step 017 | Loss 1.6478 | Elasped 0:03:38 | ETA 0:06:28
+2023-10-16 12:27:49,892 - Train Epoch 019 | Step 000 | Loss 1.7866 | Elasped 0:03:39 | ETA 0:06:27
+2023-10-16 12:27:50,507 - Train Epoch 019 | Step 001 | Loss 1.6830 | Elasped 0:03:39 | ETA 0:06:26
+2023-10-16 12:27:51,151 - Train Epoch 019 | Step 002 | Loss 1.8116 | Elasped 0:03:40 | ETA 0:06:26
+2023-10-16 12:27:51,763 - Train Epoch 019 | Step 003 | Loss 1.7002 | Elasped 0:03:40 | ETA 0:06:25
+2023-10-16 12:27:52,372 - Train Epoch 019 | Step 004 | Loss 1.6003 | Elasped 0:03:41 | ETA 0:06:24
+2023-10-16 12:27:53,086 - Train Epoch 019 | Step 005 | Loss 1.7984 | Elasped 0:03:42 | ETA 0:06:24
+2023-10-16 12:27:53,688 - Train Epoch 019 | Step 006 | Loss 1.8651 | Elasped 0:03:42 | ETA 0:06:23
+2023-10-16 12:27:54,291 - Train Epoch 019 | Step 007 | Loss 1.8345 | Elasped 0:03:43 | ETA 0:06:22
+2023-10-16 12:27:54,944 - Train Epoch 019 | Step 008 | Loss 1.8508 | Elasped 0:03:44 | ETA 0:06:21
+2023-10-16 12:27:55,508 - Train Epoch 019 | Step 009 | Loss 1.4861 | Elasped 0:03:44 | ETA 0:06:20
+2023-10-16 12:27:56,085 - Train Epoch 019 | Step 010 | Loss 1.5766 | Elasped 0:03:45 | ETA 0:06:20
+2023-10-16 12:27:56,814 - Train Epoch 019 | Step 011 | Loss 1.4007 | Elasped 0:03:46 | ETA 0:06:19
+2023-10-16 12:27:57,436 - Train Epoch 019 | Step 012 | Loss 1.5118 | Elasped 0:03:46 | ETA 0:06:18
+2023-10-16 12:27:58,057 - Train Epoch 019 | Step 013 | Loss 1.6905 | Elasped 0:03:47 | ETA 0:06:17
+2023-10-16 12:27:58,723 - Train Epoch 019 | Step 014 | Loss 1.0179 | Elasped 0:03:47 | ETA 0:06:17
+2023-10-16 12:27:59,335 - Train Epoch 019 | Step 015 | Loss 1.5722 | Elasped 0:03:48 | ETA 0:06:16
+2023-10-16 12:27:59,987 - Train Epoch 019 | Step 016 | Loss 1.5229 | Elasped 0:03:49 | ETA 0:06:15
+2023-10-16 12:28:00,594 - Train Epoch 019 | Step 017 | Loss 1.6026 | Elasped 0:03:49 | ETA 0:06:14
+2023-10-16 12:28:01,238 - Train Epoch 020 | Step 000 | Loss 1.6437 | Elasped 0:03:50 | ETA 0:06:14
+2023-10-16 12:28:01,860 - Train Epoch 020 | Step 001 | Loss 1.4345 | Elasped 0:03:51 | ETA 0:06:13
+2023-10-16 12:28:02,489 - Train Epoch 020 | Step 002 | Loss 1.4620 | Elasped 0:03:51 | ETA 0:06:12
+2023-10-16 12:28:03,115 - Train Epoch 020 | Step 003 | Loss 1.6927 | Elasped 0:03:52 | ETA 0:06:12
+2023-10-16 12:28:03,777 - Train Epoch 020 | Step 004 | Loss 1.4277 | Elasped 0:03:53 | ETA 0:06:11
+2023-10-16 12:28:04,394 - Train Epoch 020 | Step 005 | Loss 1.6170 | Elasped 0:03:53 | ETA 0:06:10
+2023-10-16 12:28:04,949 - Train Epoch 020 | Step 006 | Loss 1.7256 | Elasped 0:03:54 | ETA 0:06:09
+2023-10-16 12:28:05,662 - Train Epoch 020 | Step 007 | Loss 0.9062 | Elasped 0:03:54 | ETA 0:06:09
+2023-10-16 12:28:06,219 - Train Epoch 020 | Step 008 | Loss 1.5435 | Elasped 0:03:55 | ETA 0:06:08
+2023-10-16 12:28:06,807 - Train Epoch 020 | Step 009 | Loss 1.5292 | Elasped 0:03:56 | ETA 0:06:07
+2023-10-16 12:28:07,478 - Train Epoch 020 | Step 010 | Loss 1.5138 | Elasped 0:03:56 | ETA 0:06:06
+2023-10-16 12:28:08,066 - Train Epoch 020 | Step 011 | Loss 1.5883 | Elasped 0:03:57 | ETA 0:06:06
+2023-10-16 12:28:08,642 - Train Epoch 020 | Step 012 | Loss 1.4964 | Elasped 0:03:57 | ETA 0:06:05
+2023-10-16 12:28:09,292 - Train Epoch 020 | Step 013 | Loss 1.4565 | Elasped 0:03:58 | ETA 0:06:04
+2023-10-16 12:28:09,911 - Train Epoch 020 | Step 014 | Loss 1.5788 | Elasped 0:03:59 | ETA 0:06:03
+2023-10-16 12:28:10,602 - Train Epoch 020 | Step 015 | Loss 1.4775 | Elasped 0:03:59 | ETA 0:06:03
+2023-10-16 12:28:11,227 - Train Epoch 020 | Step 016 | Loss 1.7598 | Elasped 0:04:00 | ETA 0:06:02
+2023-10-16 12:28:11,877 - Train Epoch 020 | Step 017 | Loss 1.6009 | Elasped 0:04:01 | ETA 0:06:01
+2023-10-16 12:28:13,077 -  Test Epoch 020 | BIL-backbone | KNN Acc: 71.07% | Best Acc 73.14% at epoch 15 
+2023-10-16 12:28:13,970 -  Test Epoch 020 | JM-backbone | KNN Acc: 58.67% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:28:14,610 -  Test Epoch 020 | ACT-backbone | KNN Acc: 52.63% | Best Acc 52.63% at epoch 20 
+2023-10-16 12:28:15,825 -  Test Epoch 020 | BIL-full | KNN Acc: 71.49% | Best Acc 73.55% at epoch 15 
+2023-10-16 12:28:16,743 -  Test Epoch 020 | JM-full | KNN Acc: 61.33% | Best Acc 61.33% at epoch 20 
+2023-10-16 12:28:17,379 -  Test Epoch 020 | ACT-full | KNN Acc: 48.42% | Best Acc 54.74% at epoch 10 
+2023-10-16 12:28:18,054 - Train Epoch 021 | Step 000 | Loss 1.7005 | Elasped 0:04:07 | ETA 0:06:09
+2023-10-16 12:28:18,707 - Train Epoch 021 | Step 001 | Loss 1.5159 | Elasped 0:04:07 | ETA 0:06:08
+2023-10-16 12:28:19,312 - Train Epoch 021 | Step 002 | Loss 1.7384 | Elasped 0:04:08 | ETA 0:06:07
+2023-10-16 12:28:19,965 - Train Epoch 021 | Step 003 | Loss 1.6549 | Elasped 0:04:09 | ETA 0:06:06
+2023-10-16 12:28:20,609 - Train Epoch 021 | Step 004 | Loss 1.7183 | Elasped 0:04:09 | ETA 0:06:06
+2023-10-16 12:28:21,270 - Train Epoch 021 | Step 005 | Loss 0.9748 | Elasped 0:04:10 | ETA 0:06:05
+2023-10-16 12:28:21,939 - Train Epoch 021 | Step 006 | Loss 1.5965 | Elasped 0:04:11 | ETA 0:06:04
+2023-10-16 12:28:22,570 - Train Epoch 021 | Step 007 | Loss 1.6723 | Elasped 0:04:11 | ETA 0:06:04
+2023-10-16 12:28:23,209 - Train Epoch 021 | Step 008 | Loss 1.4767 | Elasped 0:04:12 | ETA 0:06:03
+2023-10-16 12:28:23,835 - Train Epoch 021 | Step 009 | Loss 1.4774 | Elasped 0:04:13 | ETA 0:06:02
+2023-10-16 12:28:24,471 - Train Epoch 021 | Step 010 | Loss 1.2411 | Elasped 0:04:13 | ETA 0:06:01
+2023-10-16 12:28:25,118 - Train Epoch 021 | Step 011 | Loss 1.5235 | Elasped 0:04:14 | ETA 0:06:01
+2023-10-16 12:28:25,711 - Train Epoch 021 | Step 012 | Loss 1.7265 | Elasped 0:04:14 | ETA 0:06:00
+2023-10-16 12:28:26,297 - Train Epoch 021 | Step 013 | Loss 1.6222 | Elasped 0:04:15 | ETA 0:05:59
+2023-10-16 12:28:26,934 - Train Epoch 021 | Step 014 | Loss 1.5767 | Elasped 0:04:16 | ETA 0:05:58
+2023-10-16 12:28:27,503 - Train Epoch 021 | Step 015 | Loss 0.9454 | Elasped 0:04:16 | ETA 0:05:57
+2023-10-16 12:28:28,150 - Train Epoch 021 | Step 016 | Loss 1.6658 | Elasped 0:04:17 | ETA 0:05:57
+2023-10-16 12:28:28,814 - Train Epoch 021 | Step 017 | Loss 0.9256 | Elasped 0:04:18 | ETA 0:05:56
+2023-10-16 12:28:29,406 - Train Epoch 022 | Step 000 | Loss 1.4557 | Elasped 0:04:18 | ETA 0:05:55
+2023-10-16 12:28:30,024 - Train Epoch 022 | Step 001 | Loss 2.1612 | Elasped 0:04:19 | ETA 0:05:54
+2023-10-16 12:28:30,668 - Train Epoch 022 | Step 002 | Loss 1.7168 | Elasped 0:04:19 | ETA 0:05:54
+2023-10-16 12:28:31,282 - Train Epoch 022 | Step 003 | Loss 1.4911 | Elasped 0:04:20 | ETA 0:05:53
+2023-10-16 12:28:31,969 - Train Epoch 022 | Step 004 | Loss 1.4859 | Elasped 0:04:21 | ETA 0:05:52
+2023-10-16 12:28:32,568 - Train Epoch 022 | Step 005 | Loss 1.2915 | Elasped 0:04:21 | ETA 0:05:51
+2023-10-16 12:28:33,208 - Train Epoch 022 | Step 006 | Loss 1.2390 | Elasped 0:04:22 | ETA 0:05:51
+2023-10-16 12:28:33,852 - Train Epoch 022 | Step 007 | Loss 1.4697 | Elasped 0:04:23 | ETA 0:05:50
+2023-10-16 12:28:34,520 - Train Epoch 022 | Step 008 | Loss 1.7960 | Elasped 0:04:23 | ETA 0:05:49
+2023-10-16 12:28:35,121 - Train Epoch 022 | Step 009 | Loss 1.2935 | Elasped 0:04:24 | ETA 0:05:48
+2023-10-16 12:28:35,796 - Train Epoch 022 | Step 010 | Loss 1.3603 | Elasped 0:04:25 | ETA 0:05:48
+2023-10-16 12:28:36,365 - Train Epoch 022 | Step 011 | Loss 1.4339 | Elasped 0:04:25 | ETA 0:05:47
+2023-10-16 12:28:37,004 - Train Epoch 022 | Step 012 | Loss 1.4027 | Elasped 0:04:26 | ETA 0:05:46
+2023-10-16 12:28:37,679 - Train Epoch 022 | Step 013 | Loss 1.6499 | Elasped 0:04:26 | ETA 0:05:45
+2023-10-16 12:28:38,268 - Train Epoch 022 | Step 014 | Loss 1.5259 | Elasped 0:04:27 | ETA 0:05:45
+2023-10-16 12:28:38,815 - Train Epoch 022 | Step 015 | Loss 1.4859 | Elasped 0:04:28 | ETA 0:05:44
+2023-10-16 12:28:39,523 - Train Epoch 022 | Step 016 | Loss 1.5210 | Elasped 0:04:28 | ETA 0:05:43
+2023-10-16 12:28:40,175 - Train Epoch 022 | Step 017 | Loss 1.5812 | Elasped 0:04:29 | ETA 0:05:42
+2023-10-16 12:28:40,780 - Train Epoch 023 | Step 000 | Loss 1.3409 | Elasped 0:04:30 | ETA 0:05:42
+2023-10-16 12:28:41,469 - Train Epoch 023 | Step 001 | Loss 1.5935 | Elasped 0:04:30 | ETA 0:05:41
+2023-10-16 12:28:42,087 - Train Epoch 023 | Step 002 | Loss 1.4131 | Elasped 0:04:31 | ETA 0:05:40
+2023-10-16 12:28:42,726 - Train Epoch 023 | Step 003 | Loss 1.4149 | Elasped 0:04:31 | ETA 0:05:39
+2023-10-16 12:28:43,327 - Train Epoch 023 | Step 004 | Loss 1.2985 | Elasped 0:04:32 | ETA 0:05:39
+2023-10-16 12:28:43,935 - Train Epoch 023 | Step 005 | Loss 1.4588 | Elasped 0:04:33 | ETA 0:05:38
+2023-10-16 12:28:44,617 - Train Epoch 023 | Step 006 | Loss 1.5010 | Elasped 0:04:33 | ETA 0:05:37
+2023-10-16 12:28:45,248 - Train Epoch 023 | Step 007 | Loss 1.5160 | Elasped 0:04:34 | ETA 0:05:36
+2023-10-16 12:28:45,852 - Train Epoch 023 | Step 008 | Loss 0.6946 | Elasped 0:04:35 | ETA 0:05:36
+2023-10-16 12:28:46,487 - Train Epoch 023 | Step 009 | Loss 1.1691 | Elasped 0:04:35 | ETA 0:05:35
+2023-10-16 12:28:47,070 - Train Epoch 023 | Step 010 | Loss 1.3225 | Elasped 0:04:36 | ETA 0:05:34
+2023-10-16 12:28:47,687 - Train Epoch 023 | Step 011 | Loss 1.2951 | Elasped 0:04:36 | ETA 0:05:33
+2023-10-16 12:28:48,362 - Train Epoch 023 | Step 012 | Loss 1.2011 | Elasped 0:04:37 | ETA 0:05:33
+2023-10-16 12:28:48,992 - Train Epoch 023 | Step 013 | Loss 1.3999 | Elasped 0:04:38 | ETA 0:05:32
+2023-10-16 12:28:49,577 - Train Epoch 023 | Step 014 | Loss 1.3774 | Elasped 0:04:38 | ETA 0:05:31
+2023-10-16 12:28:50,260 - Train Epoch 023 | Step 015 | Loss 1.2025 | Elasped 0:04:39 | ETA 0:05:31
+2023-10-16 12:28:50,905 - Train Epoch 023 | Step 016 | Loss 1.2663 | Elasped 0:04:40 | ETA 0:05:30
+2023-10-16 12:28:51,544 - Train Epoch 023 | Step 017 | Loss 1.3221 | Elasped 0:04:40 | ETA 0:05:29
+2023-10-16 12:28:52,154 - Train Epoch 024 | Step 000 | Loss 1.2226 | Elasped 0:04:41 | ETA 0:05:28
+2023-10-16 12:28:52,728 - Train Epoch 024 | Step 001 | Loss 1.7329 | Elasped 0:04:41 | ETA 0:05:28
+2023-10-16 12:28:53,411 - Train Epoch 024 | Step 002 | Loss 1.3079 | Elasped 0:04:42 | ETA 0:05:27
+2023-10-16 12:28:54,022 - Train Epoch 024 | Step 003 | Loss 1.0481 | Elasped 0:04:43 | ETA 0:05:26
+2023-10-16 12:28:54,629 - Train Epoch 024 | Step 004 | Loss 1.5657 | Elasped 0:04:43 | ETA 0:05:25
+2023-10-16 12:28:55,266 - Train Epoch 024 | Step 005 | Loss 1.4769 | Elasped 0:04:44 | ETA 0:05:25
+2023-10-16 12:28:55,892 - Train Epoch 024 | Step 006 | Loss 0.9258 | Elasped 0:04:45 | ETA 0:05:24
+2023-10-16 12:28:56,480 - Train Epoch 024 | Step 007 | Loss 1.5005 | Elasped 0:04:45 | ETA 0:05:23
+2023-10-16 12:28:57,175 - Train Epoch 024 | Step 008 | Loss 1.3588 | Elasped 0:04:46 | ETA 0:05:22
+2023-10-16 12:28:57,828 - Train Epoch 024 | Step 009 | Loss 1.4771 | Elasped 0:04:47 | ETA 0:05:22
+2023-10-16 12:28:58,412 - Train Epoch 024 | Step 010 | Loss 1.3407 | Elasped 0:04:47 | ETA 0:05:21
+2023-10-16 12:28:59,069 - Train Epoch 024 | Step 011 | Loss 1.6739 | Elasped 0:04:48 | ETA 0:05:20
+2023-10-16 12:28:59,676 - Train Epoch 024 | Step 012 | Loss 1.5175 | Elasped 0:04:48 | ETA 0:05:20
+2023-10-16 12:29:00,373 - Train Epoch 024 | Step 013 | Loss 1.4119 | Elasped 0:04:49 | ETA 0:05:19
+2023-10-16 12:29:00,936 - Train Epoch 024 | Step 014 | Loss 1.4191 | Elasped 0:04:50 | ETA 0:05:18
+2023-10-16 12:29:01,507 - Train Epoch 024 | Step 015 | Loss 1.4417 | Elasped 0:04:50 | ETA 0:05:17
+2023-10-16 12:29:02,158 - Train Epoch 024 | Step 016 | Loss 0.9516 | Elasped 0:04:51 | ETA 0:05:17
+2023-10-16 12:29:02,713 - Train Epoch 024 | Step 017 | Loss 1.5417 | Elasped 0:04:51 | ETA 0:05:16
+2023-10-16 12:29:03,277 - Train Epoch 025 | Step 000 | Loss 1.4293 | Elasped 0:04:52 | ETA 0:05:15
+2023-10-16 12:29:03,929 - Train Epoch 025 | Step 001 | Loss 1.4545 | Elasped 0:04:53 | ETA 0:05:14
+2023-10-16 12:29:04,471 - Train Epoch 025 | Step 002 | Loss 1.0306 | Elasped 0:04:53 | ETA 0:05:13
+2023-10-16 12:29:05,066 - Train Epoch 025 | Step 003 | Loss 1.3450 | Elasped 0:04:54 | ETA 0:05:13
+2023-10-16 12:29:05,728 - Train Epoch 025 | Step 004 | Loss 1.3509 | Elasped 0:04:54 | ETA 0:05:12
+2023-10-16 12:29:06,337 - Train Epoch 025 | Step 005 | Loss 1.2585 | Elasped 0:04:55 | ETA 0:05:11
+2023-10-16 12:29:06,959 - Train Epoch 025 | Step 006 | Loss 1.4070 | Elasped 0:04:56 | ETA 0:05:11
+2023-10-16 12:29:07,650 - Train Epoch 025 | Step 007 | Loss 0.4176 | Elasped 0:04:56 | ETA 0:05:10
+2023-10-16 12:29:08,195 - Train Epoch 025 | Step 008 | Loss 1.4656 | Elasped 0:04:57 | ETA 0:05:09
+2023-10-16 12:29:08,841 - Train Epoch 025 | Step 009 | Loss 1.1374 | Elasped 0:04:58 | ETA 0:05:08
+2023-10-16 12:29:09,489 - Train Epoch 025 | Step 010 | Loss 1.3941 | Elasped 0:04:58 | ETA 0:05:08
+2023-10-16 12:29:10,095 - Train Epoch 025 | Step 011 | Loss 1.3747 | Elasped 0:04:59 | ETA 0:05:07
+2023-10-16 12:29:10,806 - Train Epoch 025 | Step 012 | Loss 1.3788 | Elasped 0:05:00 | ETA 0:05:06
+2023-10-16 12:29:11,447 - Train Epoch 025 | Step 013 | Loss 1.4710 | Elasped 0:05:00 | ETA 0:05:06
+2023-10-16 12:29:12,050 - Train Epoch 025 | Step 014 | Loss 1.1686 | Elasped 0:05:01 | ETA 0:05:05
+2023-10-16 12:29:12,684 - Train Epoch 025 | Step 015 | Loss 1.2945 | Elasped 0:05:01 | ETA 0:05:04
+2023-10-16 12:29:13,304 - Train Epoch 025 | Step 016 | Loss 1.5870 | Elasped 0:05:02 | ETA 0:05:03
+2023-10-16 12:29:13,934 - Train Epoch 025 | Step 017 | Loss 1.3887 | Elasped 0:05:03 | ETA 0:05:03
+2023-10-16 12:29:15,104 -  Test Epoch 025 | BIL-backbone | KNN Acc: 75.62% | Best Acc 75.62% at epoch 25 
+2023-10-16 12:29:15,989 -  Test Epoch 025 | JM-backbone | KNN Acc: 60.00% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:29:16,610 -  Test Epoch 025 | ACT-backbone | KNN Acc: 54.74% | Best Acc 54.74% at epoch 25 
+2023-10-16 12:29:17,775 -  Test Epoch 025 | BIL-full | KNN Acc: 70.25% | Best Acc 73.55% at epoch 15 
+2023-10-16 12:29:18,660 -  Test Epoch 025 | JM-full | KNN Acc: 56.00% | Best Acc 61.33% at epoch 20 
+2023-10-16 12:29:19,272 -  Test Epoch 025 | ACT-full | KNN Acc: 54.74% | Best Acc 54.74% at epoch 10 
+2023-10-16 12:29:19,854 - Train Epoch 026 | Step 000 | Loss 1.3982 | Elasped 0:05:09 | ETA 0:05:07
+2023-10-16 12:29:20,428 - Train Epoch 026 | Step 001 | Loss 1.4788 | Elasped 0:05:09 | ETA 0:05:06
+2023-10-16 12:29:21,051 - Train Epoch 026 | Step 002 | Loss 1.0734 | Elasped 0:05:10 | ETA 0:05:06
+2023-10-16 12:29:21,604 - Train Epoch 026 | Step 003 | Loss 0.9613 | Elasped 0:05:10 | ETA 0:05:05
+2023-10-16 12:29:22,236 - Train Epoch 026 | Step 004 | Loss 1.5149 | Elasped 0:05:11 | ETA 0:05:04
+2023-10-16 12:29:22,930 - Train Epoch 026 | Step 005 | Loss 1.3937 | Elasped 0:05:12 | ETA 0:05:03
+2023-10-16 12:29:23,552 - Train Epoch 026 | Step 006 | Loss 1.5390 | Elasped 0:05:12 | ETA 0:05:03
+2023-10-16 12:29:24,166 - Train Epoch 026 | Step 007 | Loss 1.3367 | Elasped 0:05:13 | ETA 0:05:02
+2023-10-16 12:29:24,806 - Train Epoch 026 | Step 008 | Loss 0.5207 | Elasped 0:05:14 | ETA 0:05:01
+2023-10-16 12:29:25,409 - Train Epoch 026 | Step 009 | Loss 1.2172 | Elasped 0:05:14 | ETA 0:05:00
+2023-10-16 12:29:26,004 - Train Epoch 026 | Step 010 | Loss 1.1736 | Elasped 0:05:15 | ETA 0:05:00
+2023-10-16 12:29:26,640 - Train Epoch 026 | Step 011 | Loss 1.2341 | Elasped 0:05:15 | ETA 0:04:59
+2023-10-16 12:29:27,226 - Train Epoch 026 | Step 012 | Loss 1.3201 | Elasped 0:05:16 | ETA 0:04:58
+2023-10-16 12:29:27,928 - Train Epoch 026 | Step 013 | Loss 1.1412 | Elasped 0:05:17 | ETA 0:04:58
+2023-10-16 12:29:28,496 - Train Epoch 026 | Step 014 | Loss 1.0613 | Elasped 0:05:17 | ETA 0:04:57
+2023-10-16 12:29:29,104 - Train Epoch 026 | Step 015 | Loss 1.2003 | Elasped 0:05:18 | ETA 0:04:56
+2023-10-16 12:29:29,757 - Train Epoch 026 | Step 016 | Loss 1.3151 | Elasped 0:05:18 | ETA 0:04:55
+2023-10-16 12:29:30,355 - Train Epoch 026 | Step 017 | Loss 1.3115 | Elasped 0:05:19 | ETA 0:04:55
+2023-10-16 12:29:30,974 - Train Epoch 027 | Step 000 | Loss 0.5982 | Elasped 0:05:20 | ETA 0:04:54
+2023-10-16 12:29:31,634 - Train Epoch 027 | Step 001 | Loss 0.4393 | Elasped 0:05:20 | ETA 0:04:53
+2023-10-16 12:29:32,195 - Train Epoch 027 | Step 002 | Loss 1.2979 | Elasped 0:05:21 | ETA 0:04:52
+2023-10-16 12:29:32,777 - Train Epoch 027 | Step 003 | Loss 1.2861 | Elasped 0:05:22 | ETA 0:04:51
+2023-10-16 12:29:33,429 - Train Epoch 027 | Step 004 | Loss 1.2068 | Elasped 0:05:22 | ETA 0:04:51
+2023-10-16 12:29:34,023 - Train Epoch 027 | Step 005 | Loss 1.2503 | Elasped 0:05:23 | ETA 0:04:50
+2023-10-16 12:29:34,638 - Train Epoch 027 | Step 006 | Loss 1.1801 | Elasped 0:05:23 | ETA 0:04:49
+2023-10-16 12:29:35,265 - Train Epoch 027 | Step 007 | Loss 1.1272 | Elasped 0:05:24 | ETA 0:04:49
+2023-10-16 12:29:35,890 - Train Epoch 027 | Step 008 | Loss 1.1850 | Elasped 0:05:25 | ETA 0:04:48
+2023-10-16 12:29:36,478 - Train Epoch 027 | Step 009 | Loss 1.1155 | Elasped 0:05:25 | ETA 0:04:47
+2023-10-16 12:29:37,159 - Train Epoch 027 | Step 010 | Loss 0.7727 | Elasped 0:05:26 | ETA 0:04:46
+2023-10-16 12:29:37,748 - Train Epoch 027 | Step 011 | Loss 1.3051 | Elasped 0:05:26 | ETA 0:04:46
+2023-10-16 12:29:38,400 - Train Epoch 027 | Step 012 | Loss 1.3584 | Elasped 0:05:27 | ETA 0:04:45
+2023-10-16 12:29:39,030 - Train Epoch 027 | Step 013 | Loss 1.4328 | Elasped 0:05:28 | ETA 0:04:44
+2023-10-16 12:29:39,589 - Train Epoch 027 | Step 014 | Loss 1.3786 | Elasped 0:05:28 | ETA 0:04:43
+2023-10-16 12:29:40,286 - Train Epoch 027 | Step 015 | Loss 1.1733 | Elasped 0:05:29 | ETA 0:04:43
+2023-10-16 12:29:40,878 - Train Epoch 027 | Step 016 | Loss 1.3081 | Elasped 0:05:30 | ETA 0:04:42
+2023-10-16 12:29:41,452 - Train Epoch 027 | Step 017 | Loss 0.6721 | Elasped 0:05:30 | ETA 0:04:41
+2023-10-16 12:29:42,119 - Train Epoch 028 | Step 000 | Loss 1.3022 | Elasped 0:05:31 | ETA 0:04:41
+2023-10-16 12:29:42,727 - Train Epoch 028 | Step 001 | Loss 1.3325 | Elasped 0:05:31 | ETA 0:04:40
+2023-10-16 12:29:43,316 - Train Epoch 028 | Step 002 | Loss 1.2017 | Elasped 0:05:32 | ETA 0:04:39
+2023-10-16 12:29:44,011 - Train Epoch 028 | Step 003 | Loss 0.5426 | Elasped 0:05:33 | ETA 0:04:38
+2023-10-16 12:29:44,575 - Train Epoch 028 | Step 004 | Loss 1.0722 | Elasped 0:05:33 | ETA 0:04:38
+2023-10-16 12:29:45,197 - Train Epoch 028 | Step 005 | Loss 1.0736 | Elasped 0:05:34 | ETA 0:04:37
+2023-10-16 12:29:45,904 - Train Epoch 028 | Step 006 | Loss 1.1144 | Elasped 0:05:35 | ETA 0:04:36
+2023-10-16 12:29:46,494 - Train Epoch 028 | Step 007 | Loss 1.0255 | Elasped 0:05:35 | ETA 0:04:35
+2023-10-16 12:29:47,159 - Train Epoch 028 | Step 008 | Loss 1.0161 | Elasped 0:05:36 | ETA 0:04:35
+2023-10-16 12:29:47,733 - Train Epoch 028 | Step 009 | Loss 1.0409 | Elasped 0:05:36 | ETA 0:04:34
+2023-10-16 12:29:48,345 - Train Epoch 028 | Step 010 | Loss 1.0681 | Elasped 0:05:37 | ETA 0:04:33
+2023-10-16 12:29:49,047 - Train Epoch 028 | Step 011 | Loss 1.0769 | Elasped 0:05:38 | ETA 0:04:33
+2023-10-16 12:29:49,659 - Train Epoch 028 | Step 012 | Loss 1.1413 | Elasped 0:05:38 | ETA 0:04:32
+2023-10-16 12:29:50,257 - Train Epoch 028 | Step 013 | Loss 1.1044 | Elasped 0:05:39 | ETA 0:04:31
+2023-10-16 12:29:50,908 - Train Epoch 028 | Step 014 | Loss 1.0966 | Elasped 0:05:40 | ETA 0:04:30
+2023-10-16 12:29:51,478 - Train Epoch 028 | Step 015 | Loss 0.9378 | Elasped 0:05:40 | ETA 0:04:30
+2023-10-16 12:29:52,081 - Train Epoch 028 | Step 016 | Loss 0.9910 | Elasped 0:05:41 | ETA 0:04:29
+2023-10-16 12:29:52,719 - Train Epoch 028 | Step 017 | Loss 1.1824 | Elasped 0:05:41 | ETA 0:04:28
+2023-10-16 12:29:53,319 - Train Epoch 029 | Step 000 | Loss 1.2278 | Elasped 0:05:42 | ETA 0:04:27
+2023-10-16 12:29:53,901 - Train Epoch 029 | Step 001 | Loss 0.8409 | Elasped 0:05:43 | ETA 0:04:27
+2023-10-16 12:29:54,571 - Train Epoch 029 | Step 002 | Loss 1.2501 | Elasped 0:05:43 | ETA 0:04:26
+2023-10-16 12:29:55,115 - Train Epoch 029 | Step 003 | Loss 1.3057 | Elasped 0:05:44 | ETA 0:04:25
+2023-10-16 12:29:55,692 - Train Epoch 029 | Step 004 | Loss 1.2527 | Elasped 0:05:44 | ETA 0:04:24
+2023-10-16 12:29:56,358 - Train Epoch 029 | Step 005 | Loss 0.6202 | Elasped 0:05:45 | ETA 0:04:24
+2023-10-16 12:29:56,923 - Train Epoch 029 | Step 006 | Loss 1.0507 | Elasped 0:05:46 | ETA 0:04:23
+2023-10-16 12:29:57,497 - Train Epoch 029 | Step 007 | Loss 1.2640 | Elasped 0:05:46 | ETA 0:04:22
+2023-10-16 12:29:58,158 - Train Epoch 029 | Step 008 | Loss 1.0727 | Elasped 0:05:47 | ETA 0:04:22
+2023-10-16 12:29:58,753 - Train Epoch 029 | Step 009 | Loss 1.1677 | Elasped 0:05:47 | ETA 0:04:21
+2023-10-16 12:29:59,358 - Train Epoch 029 | Step 010 | Loss 1.2263 | Elasped 0:05:48 | ETA 0:04:20
+2023-10-16 12:30:00,062 - Train Epoch 029 | Step 011 | Loss 1.1434 | Elasped 0:05:49 | ETA 0:04:19
+2023-10-16 12:30:00,642 - Train Epoch 029 | Step 012 | Loss 1.4591 | Elasped 0:05:49 | ETA 0:04:19
+2023-10-16 12:30:01,240 - Train Epoch 029 | Step 013 | Loss 1.0349 | Elasped 0:05:50 | ETA 0:04:18
+2023-10-16 12:30:01,902 - Train Epoch 029 | Step 014 | Loss 1.1468 | Elasped 0:05:51 | ETA 0:04:17
+2023-10-16 12:30:02,539 - Train Epoch 029 | Step 015 | Loss 1.2554 | Elasped 0:05:51 | ETA 0:04:17
+2023-10-16 12:30:03,267 - Train Epoch 029 | Step 016 | Loss 1.0584 | Elasped 0:05:52 | ETA 0:04:16
+2023-10-16 12:30:03,872 - Train Epoch 029 | Step 017 | Loss 0.4043 | Elasped 0:05:53 | ETA 0:04:15
+2023-10-16 12:30:04,453 - Train Epoch 030 | Step 000 | Loss 1.3398 | Elasped 0:05:53 | ETA 0:04:14
+2023-10-16 12:30:05,071 - Train Epoch 030 | Step 001 | Loss 1.3096 | Elasped 0:05:54 | ETA 0:04:14
+2023-10-16 12:30:05,699 - Train Epoch 030 | Step 002 | Loss 1.1064 | Elasped 0:05:54 | ETA 0:04:13
+2023-10-16 12:30:06,301 - Train Epoch 030 | Step 003 | Loss 1.2021 | Elasped 0:05:55 | ETA 0:04:12
+2023-10-16 12:30:06,928 - Train Epoch 030 | Step 004 | Loss 1.2431 | Elasped 0:05:56 | ETA 0:04:12
+2023-10-16 12:30:07,541 - Train Epoch 030 | Step 005 | Loss 0.7811 | Elasped 0:05:56 | ETA 0:04:11
+2023-10-16 12:30:08,163 - Train Epoch 030 | Step 006 | Loss 1.0436 | Elasped 0:05:57 | ETA 0:04:10
+2023-10-16 12:30:08,823 - Train Epoch 030 | Step 007 | Loss 0.8242 | Elasped 0:05:58 | ETA 0:04:09
+2023-10-16 12:30:09,412 - Train Epoch 030 | Step 008 | Loss 1.1389 | Elasped 0:05:58 | ETA 0:04:09
+2023-10-16 12:30:10,043 - Train Epoch 030 | Step 009 | Loss 1.1897 | Elasped 0:05:59 | ETA 0:04:08
+2023-10-16 12:30:10,670 - Train Epoch 030 | Step 010 | Loss 1.0770 | Elasped 0:05:59 | ETA 0:04:07
+2023-10-16 12:30:11,242 - Train Epoch 030 | Step 011 | Loss 1.0846 | Elasped 0:06:00 | ETA 0:04:07
+2023-10-16 12:30:11,893 - Train Epoch 030 | Step 012 | Loss 1.1064 | Elasped 0:06:01 | ETA 0:04:06
+2023-10-16 12:30:12,469 - Train Epoch 030 | Step 013 | Loss 1.0119 | Elasped 0:06:01 | ETA 0:04:05
+2023-10-16 12:30:13,077 - Train Epoch 030 | Step 014 | Loss 0.7407 | Elasped 0:06:02 | ETA 0:04:04
+2023-10-16 12:30:13,716 - Train Epoch 030 | Step 015 | Loss 0.9833 | Elasped 0:06:02 | ETA 0:04:04
+2023-10-16 12:30:14,342 - Train Epoch 030 | Step 016 | Loss 1.1211 | Elasped 0:06:03 | ETA 0:04:03
+2023-10-16 12:30:14,992 - Train Epoch 030 | Step 017 | Loss 0.7525 | Elasped 0:06:04 | ETA 0:04:02
+2023-10-16 12:30:16,160 -  Test Epoch 030 | BIL-backbone | KNN Acc: 74.79% | Best Acc 75.62% at epoch 25 
+2023-10-16 12:30:17,052 -  Test Epoch 030 | JM-backbone | KNN Acc: 60.00% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:30:17,679 -  Test Epoch 030 | ACT-backbone | KNN Acc: 51.58% | Best Acc 54.74% at epoch 25 
+2023-10-16 12:30:18,866 -  Test Epoch 030 | BIL-full | KNN Acc: 75.62% | Best Acc 75.62% at epoch 30 
+2023-10-16 12:30:19,759 -  Test Epoch 030 | JM-full | KNN Acc: 61.33% | Best Acc 61.33% at epoch 20 
+2023-10-16 12:30:20,374 -  Test Epoch 030 | ACT-full | KNN Acc: 56.84% | Best Acc 56.84% at epoch 30 
+2023-10-16 12:30:21,027 - Train Epoch 031 | Step 000 | Loss 0.9188 | Elasped 0:06:10 | ETA 0:04:05
+2023-10-16 12:30:21,651 - Train Epoch 031 | Step 001 | Loss 1.0928 | Elasped 0:06:10 | ETA 0:04:04
+2023-10-16 12:30:22,247 - Train Epoch 031 | Step 002 | Loss 1.0899 | Elasped 0:06:11 | ETA 0:04:04
+2023-10-16 12:30:22,879 - Train Epoch 031 | Step 003 | Loss 1.1092 | Elasped 0:06:12 | ETA 0:04:03
+2023-10-16 12:30:23,465 - Train Epoch 031 | Step 004 | Loss 1.0587 | Elasped 0:06:12 | ETA 0:04:02
+2023-10-16 12:30:24,088 - Train Epoch 031 | Step 005 | Loss 1.0231 | Elasped 0:06:13 | ETA 0:04:02
+2023-10-16 12:30:24,729 - Train Epoch 031 | Step 006 | Loss 0.9963 | Elasped 0:06:13 | ETA 0:04:01
+2023-10-16 12:30:25,299 - Train Epoch 031 | Step 007 | Loss 1.1697 | Elasped 0:06:14 | ETA 0:04:00
+2023-10-16 12:30:25,955 - Train Epoch 031 | Step 008 | Loss 1.0182 | Elasped 0:06:15 | ETA 0:03:59
+2023-10-16 12:30:26,536 - Train Epoch 031 | Step 009 | Loss 1.2170 | Elasped 0:06:15 | ETA 0:03:59
+2023-10-16 12:30:27,148 - Train Epoch 031 | Step 010 | Loss 1.0961 | Elasped 0:06:16 | ETA 0:03:58
+2023-10-16 12:30:27,819 - Train Epoch 031 | Step 011 | Loss 1.0299 | Elasped 0:06:17 | ETA 0:03:57
+2023-10-16 12:30:28,411 - Train Epoch 031 | Step 012 | Loss 1.1111 | Elasped 0:06:17 | ETA 0:03:56
+2023-10-16 12:30:29,008 - Train Epoch 031 | Step 013 | Loss 1.1148 | Elasped 0:06:18 | ETA 0:03:56
+2023-10-16 12:30:29,657 - Train Epoch 031 | Step 014 | Loss 0.3668 | Elasped 0:06:18 | ETA 0:03:55
+2023-10-16 12:30:30,278 - Train Epoch 031 | Step 015 | Loss 1.1303 | Elasped 0:06:19 | ETA 0:03:54
+2023-10-16 12:30:30,896 - Train Epoch 031 | Step 016 | Loss 1.0665 | Elasped 0:06:20 | ETA 0:03:54
+2023-10-16 12:30:31,571 - Train Epoch 031 | Step 017 | Loss 1.0889 | Elasped 0:06:20 | ETA 0:03:53
+2023-10-16 12:30:32,187 - Train Epoch 032 | Step 000 | Loss 1.0530 | Elasped 0:06:21 | ETA 0:03:52
+2023-10-16 12:30:32,776 - Train Epoch 032 | Step 001 | Loss 1.2418 | Elasped 0:06:22 | ETA 0:03:51
+2023-10-16 12:30:33,442 - Train Epoch 032 | Step 002 | Loss 1.0625 | Elasped 0:06:22 | ETA 0:03:51
+2023-10-16 12:30:34,045 - Train Epoch 032 | Step 003 | Loss 0.6780 | Elasped 0:06:23 | ETA 0:03:50
+2023-10-16 12:30:34,684 - Train Epoch 032 | Step 004 | Loss 1.1845 | Elasped 0:06:23 | ETA 0:03:49
+2023-10-16 12:30:35,283 - Train Epoch 032 | Step 005 | Loss 1.2191 | Elasped 0:06:24 | ETA 0:03:49
+2023-10-16 12:30:35,852 - Train Epoch 032 | Step 006 | Loss 1.1764 | Elasped 0:06:25 | ETA 0:03:48
+2023-10-16 12:30:36,504 - Train Epoch 032 | Step 007 | Loss 1.3352 | Elasped 0:06:25 | ETA 0:03:47
+2023-10-16 12:30:37,109 - Train Epoch 032 | Step 008 | Loss 0.4927 | Elasped 0:06:26 | ETA 0:03:46
+2023-10-16 12:30:37,742 - Train Epoch 032 | Step 009 | Loss 1.1125 | Elasped 0:06:26 | ETA 0:03:46
+2023-10-16 12:30:38,390 - Train Epoch 032 | Step 010 | Loss 0.8941 | Elasped 0:06:27 | ETA 0:03:45
+2023-10-16 12:30:38,988 - Train Epoch 032 | Step 011 | Loss 1.0436 | Elasped 0:06:28 | ETA 0:03:44
+2023-10-16 12:30:39,610 - Train Epoch 032 | Step 012 | Loss 0.8468 | Elasped 0:06:28 | ETA 0:03:44
+2023-10-16 12:30:40,270 - Train Epoch 032 | Step 013 | Loss 0.6210 | Elasped 0:06:29 | ETA 0:03:43
+2023-10-16 12:30:40,873 - Train Epoch 032 | Step 014 | Loss 0.8507 | Elasped 0:06:30 | ETA 0:03:42
+2023-10-16 12:30:41,472 - Train Epoch 032 | Step 015 | Loss 0.8990 | Elasped 0:06:30 | ETA 0:03:41
+2023-10-16 12:30:42,110 - Train Epoch 032 | Step 016 | Loss 0.8472 | Elasped 0:06:31 | ETA 0:03:41
+2023-10-16 12:30:42,699 - Train Epoch 032 | Step 017 | Loss 0.9966 | Elasped 0:06:31 | ETA 0:03:40
+2023-10-16 12:30:43,347 - Train Epoch 033 | Step 000 | Loss 0.7714 | Elasped 0:06:32 | ETA 0:03:39
+2023-10-16 12:30:43,980 - Train Epoch 033 | Step 001 | Loss 0.8967 | Elasped 0:06:33 | ETA 0:03:39
+2023-10-16 12:30:44,612 - Train Epoch 033 | Step 002 | Loss 0.8371 | Elasped 0:06:33 | ETA 0:03:38
+2023-10-16 12:30:45,274 - Train Epoch 033 | Step 003 | Loss 1.2072 | Elasped 0:06:34 | ETA 0:03:37
+2023-10-16 12:30:45,870 - Train Epoch 033 | Step 004 | Loss 0.9284 | Elasped 0:06:35 | ETA 0:03:36
+2023-10-16 12:30:46,425 - Train Epoch 033 | Step 005 | Loss 0.8154 | Elasped 0:06:35 | ETA 0:03:36
+2023-10-16 12:30:47,069 - Train Epoch 033 | Step 006 | Loss 0.9847 | Elasped 0:06:36 | ETA 0:03:35
+2023-10-16 12:30:47,657 - Train Epoch 033 | Step 007 | Loss 0.9587 | Elasped 0:06:36 | ETA 0:03:34
+2023-10-16 12:30:48,230 - Train Epoch 033 | Step 008 | Loss 0.9978 | Elasped 0:06:37 | ETA 0:03:34
+2023-10-16 12:30:48,879 - Train Epoch 033 | Step 009 | Loss 0.8783 | Elasped 0:06:38 | ETA 0:03:33
+2023-10-16 12:30:49,482 - Train Epoch 033 | Step 010 | Loss 0.9407 | Elasped 0:06:38 | ETA 0:03:32
+2023-10-16 12:30:50,038 - Train Epoch 033 | Step 011 | Loss 1.1322 | Elasped 0:06:39 | ETA 0:03:31
+2023-10-16 12:30:50,724 - Train Epoch 033 | Step 012 | Loss 0.8914 | Elasped 0:06:39 | ETA 0:03:31
+2023-10-16 12:30:51,333 - Train Epoch 033 | Step 013 | Loss 0.9091 | Elasped 0:06:40 | ETA 0:03:30
+2023-10-16 12:30:52,043 - Train Epoch 033 | Step 014 | Loss 1.0466 | Elasped 0:06:41 | ETA 0:03:29
+2023-10-16 12:30:52,647 - Train Epoch 033 | Step 015 | Loss 1.0465 | Elasped 0:06:41 | ETA 0:03:29
+2023-10-16 12:30:53,285 - Train Epoch 033 | Step 016 | Loss 0.7557 | Elasped 0:06:42 | ETA 0:03:28
+2023-10-16 12:30:53,919 - Train Epoch 033 | Step 017 | Loss 1.1521 | Elasped 0:06:43 | ETA 0:03:27
+2023-10-16 12:30:54,552 - Train Epoch 034 | Step 000 | Loss 0.3633 | Elasped 0:06:43 | ETA 0:03:26
+2023-10-16 12:30:55,157 - Train Epoch 034 | Step 001 | Loss 1.2984 | Elasped 0:06:44 | ETA 0:03:26
+2023-10-16 12:30:55,790 - Train Epoch 034 | Step 002 | Loss 1.1894 | Elasped 0:06:45 | ETA 0:03:25
+2023-10-16 12:30:56,383 - Train Epoch 034 | Step 003 | Loss 0.7925 | Elasped 0:06:45 | ETA 0:03:24
+2023-10-16 12:30:56,971 - Train Epoch 034 | Step 004 | Loss 1.0297 | Elasped 0:06:46 | ETA 0:03:24
+2023-10-16 12:30:57,632 - Train Epoch 034 | Step 005 | Loss 1.0659 | Elasped 0:06:46 | ETA 0:03:23
+2023-10-16 12:30:58,292 - Train Epoch 034 | Step 006 | Loss 0.9308 | Elasped 0:06:47 | ETA 0:03:22
+2023-10-16 12:30:58,927 - Train Epoch 034 | Step 007 | Loss 0.6377 | Elasped 0:06:48 | ETA 0:03:22
+2023-10-16 12:30:59,513 - Train Epoch 034 | Step 008 | Loss 0.6554 | Elasped 0:06:48 | ETA 0:03:21
+2023-10-16 12:31:00,096 - Train Epoch 034 | Step 009 | Loss 1.0006 | Elasped 0:06:49 | ETA 0:03:20
+2023-10-16 12:31:00,794 - Train Epoch 034 | Step 010 | Loss 1.0426 | Elasped 0:06:50 | ETA 0:03:19
+2023-10-16 12:31:01,425 - Train Epoch 034 | Step 011 | Loss 0.4986 | Elasped 0:06:50 | ETA 0:03:19
+2023-10-16 12:31:02,002 - Train Epoch 034 | Step 012 | Loss 0.7326 | Elasped 0:06:51 | ETA 0:03:18
+2023-10-16 12:31:02,694 - Train Epoch 034 | Step 013 | Loss 0.9108 | Elasped 0:06:51 | ETA 0:03:17
+2023-10-16 12:31:03,304 - Train Epoch 034 | Step 014 | Loss 0.8361 | Elasped 0:06:52 | ETA 0:03:17
+2023-10-16 12:31:03,980 - Train Epoch 034 | Step 015 | Loss 0.9119 | Elasped 0:06:53 | ETA 0:03:16
+2023-10-16 12:31:04,575 - Train Epoch 034 | Step 016 | Loss 0.9744 | Elasped 0:06:53 | ETA 0:03:15
+2023-10-16 12:31:05,144 - Train Epoch 034 | Step 017 | Loss 1.0159 | Elasped 0:06:54 | ETA 0:03:15
+2023-10-16 12:31:05,724 - Train Epoch 035 | Step 000 | Loss 0.9739 | Elasped 0:06:54 | ETA 0:03:14
+2023-10-16 12:31:06,352 - Train Epoch 035 | Step 001 | Loss 0.9970 | Elasped 0:06:55 | ETA 0:03:13
+2023-10-16 12:31:06,948 - Train Epoch 035 | Step 002 | Loss 1.1116 | Elasped 0:06:56 | ETA 0:03:12
+2023-10-16 12:31:07,625 - Train Epoch 035 | Step 003 | Loss 0.2750 | Elasped 0:06:56 | ETA 0:03:12
+2023-10-16 12:31:08,229 - Train Epoch 035 | Step 004 | Loss 0.9501 | Elasped 0:06:57 | ETA 0:03:11
+2023-10-16 12:31:08,830 - Train Epoch 035 | Step 005 | Loss 1.4058 | Elasped 0:06:58 | ETA 0:03:10
+2023-10-16 12:31:09,501 - Train Epoch 035 | Step 006 | Loss 0.9690 | Elasped 0:06:58 | ETA 0:03:10
+2023-10-16 12:31:10,149 - Train Epoch 035 | Step 007 | Loss 1.0310 | Elasped 0:06:59 | ETA 0:03:09
+2023-10-16 12:31:10,750 - Train Epoch 035 | Step 008 | Loss 1.0224 | Elasped 0:06:59 | ETA 0:03:08
+2023-10-16 12:31:11,384 - Train Epoch 035 | Step 009 | Loss 0.9928 | Elasped 0:07:00 | ETA 0:03:07
+2023-10-16 12:31:11,965 - Train Epoch 035 | Step 010 | Loss 0.5094 | Elasped 0:07:01 | ETA 0:03:07
+2023-10-16 12:31:12,573 - Train Epoch 035 | Step 011 | Loss 0.8355 | Elasped 0:07:01 | ETA 0:03:06
+2023-10-16 12:31:13,205 - Train Epoch 035 | Step 012 | Loss 1.1139 | Elasped 0:07:02 | ETA 0:03:05
+2023-10-16 12:31:13,830 - Train Epoch 035 | Step 013 | Loss 1.0502 | Elasped 0:07:03 | ETA 0:03:05
+2023-10-16 12:31:14,448 - Train Epoch 035 | Step 014 | Loss 0.7333 | Elasped 0:07:03 | ETA 0:03:04
+2023-10-16 12:31:15,088 - Train Epoch 035 | Step 015 | Loss 1.0214 | Elasped 0:07:04 | ETA 0:03:03
+2023-10-16 12:31:15,736 - Train Epoch 035 | Step 016 | Loss 0.9672 | Elasped 0:07:04 | ETA 0:03:03
+2023-10-16 12:31:16,321 - Train Epoch 035 | Step 017 | Loss 0.5212 | Elasped 0:07:05 | ETA 0:03:02
+2023-10-16 12:31:17,504 -  Test Epoch 035 | BIL-backbone | KNN Acc: 76.45% | Best Acc 76.45% at epoch 35 
+2023-10-16 12:31:18,410 -  Test Epoch 035 | JM-backbone | KNN Acc: 60.00% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:31:19,063 -  Test Epoch 035 | ACT-backbone | KNN Acc: 49.47% | Best Acc 54.74% at epoch 25 
+2023-10-16 12:31:20,266 -  Test Epoch 035 | BIL-full | KNN Acc: 72.73% | Best Acc 75.62% at epoch 30 
+2023-10-16 12:31:21,171 -  Test Epoch 035 | JM-full | KNN Acc: 62.67% | Best Acc 62.67% at epoch 35 
+2023-10-16 12:31:21,786 -  Test Epoch 035 | ACT-full | KNN Acc: 51.58% | Best Acc 56.84% at epoch 30 
+2023-10-16 12:31:22,458 - Train Epoch 036 | Step 000 | Loss 0.9838 | Elasped 0:07:11 | ETA 0:03:04
+2023-10-16 12:31:23,114 - Train Epoch 036 | Step 001 | Loss 0.9985 | Elasped 0:07:12 | ETA 0:03:03
+2023-10-16 12:31:23,776 - Train Epoch 036 | Step 002 | Loss 1.0055 | Elasped 0:07:13 | ETA 0:03:02
+2023-10-16 12:31:24,428 - Train Epoch 036 | Step 003 | Loss 1.1837 | Elasped 0:07:13 | ETA 0:03:01
+2023-10-16 12:31:25,045 - Train Epoch 036 | Step 004 | Loss 1.0351 | Elasped 0:07:14 | ETA 0:03:01
+2023-10-16 12:31:25,711 - Train Epoch 036 | Step 005 | Loss 1.0779 | Elasped 0:07:14 | ETA 0:03:00
+2023-10-16 12:31:26,322 - Train Epoch 036 | Step 006 | Loss 0.6502 | Elasped 0:07:15 | ETA 0:02:59
+2023-10-16 12:31:26,925 - Train Epoch 036 | Step 007 | Loss 0.9794 | Elasped 0:07:16 | ETA 0:02:59
+2023-10-16 12:31:27,606 - Train Epoch 036 | Step 008 | Loss 0.6160 | Elasped 0:07:16 | ETA 0:02:58
+2023-10-16 12:31:28,185 - Train Epoch 036 | Step 009 | Loss 0.8761 | Elasped 0:07:17 | ETA 0:02:57
+2023-10-16 12:31:28,830 - Train Epoch 036 | Step 010 | Loss 1.3314 | Elasped 0:07:18 | ETA 0:02:57
+2023-10-16 12:31:29,472 - Train Epoch 036 | Step 011 | Loss 0.4017 | Elasped 0:07:18 | ETA 0:02:56
+2023-10-16 12:31:30,081 - Train Epoch 036 | Step 012 | Loss 1.0006 | Elasped 0:07:19 | ETA 0:02:55
+2023-10-16 12:31:30,672 - Train Epoch 036 | Step 013 | Loss 0.8906 | Elasped 0:07:19 | ETA 0:02:54
+2023-10-16 12:31:31,332 - Train Epoch 036 | Step 014 | Loss 0.7407 | Elasped 0:07:20 | ETA 0:02:54
+2023-10-16 12:31:31,938 - Train Epoch 036 | Step 015 | Loss 0.6487 | Elasped 0:07:21 | ETA 0:02:53
+2023-10-16 12:31:32,535 - Train Epoch 036 | Step 016 | Loss 0.8843 | Elasped 0:07:21 | ETA 0:02:52
+2023-10-16 12:31:33,217 - Train Epoch 036 | Step 017 | Loss 1.1480 | Elasped 0:07:22 | ETA 0:02:52
+2023-10-16 12:31:33,771 - Train Epoch 037 | Step 000 | Loss 2.0813 | Elasped 0:07:23 | ETA 0:02:51
+2023-10-16 12:31:34,374 - Train Epoch 037 | Step 001 | Loss 0.7802 | Elasped 0:07:23 | ETA 0:02:50
+2023-10-16 12:31:35,074 - Train Epoch 037 | Step 002 | Loss 1.1962 | Elasped 0:07:24 | ETA 0:02:49
+2023-10-16 12:31:35,681 - Train Epoch 037 | Step 003 | Loss 0.6401 | Elasped 0:07:24 | ETA 0:02:49
+2023-10-16 12:31:36,369 - Train Epoch 037 | Step 004 | Loss 1.5847 | Elasped 0:07:25 | ETA 0:02:48
+2023-10-16 12:31:36,937 - Train Epoch 037 | Step 005 | Loss 1.4201 | Elasped 0:07:26 | ETA 0:02:47
+2023-10-16 12:31:37,515 - Train Epoch 037 | Step 006 | Loss 1.2404 | Elasped 0:07:26 | ETA 0:02:47
+2023-10-16 12:31:38,177 - Train Epoch 037 | Step 007 | Loss 1.2255 | Elasped 0:07:27 | ETA 0:02:46
+2023-10-16 12:31:38,801 - Train Epoch 037 | Step 008 | Loss 1.4600 | Elasped 0:07:28 | ETA 0:02:45
+2023-10-16 12:31:39,400 - Train Epoch 037 | Step 009 | Loss 1.2772 | Elasped 0:07:28 | ETA 0:02:44
+2023-10-16 12:31:40,071 - Train Epoch 037 | Step 010 | Loss 1.5156 | Elasped 0:07:29 | ETA 0:02:44
+2023-10-16 12:31:40,675 - Train Epoch 037 | Step 011 | Loss 1.3993 | Elasped 0:07:29 | ETA 0:02:43
+2023-10-16 12:31:41,330 - Train Epoch 037 | Step 012 | Loss 1.0111 | Elasped 0:07:30 | ETA 0:02:42
+2023-10-16 12:31:41,966 - Train Epoch 037 | Step 013 | Loss 1.1779 | Elasped 0:07:31 | ETA 0:02:42
+2023-10-16 12:31:42,543 - Train Epoch 037 | Step 014 | Loss 1.1123 | Elasped 0:07:31 | ETA 0:02:41
+2023-10-16 12:31:43,141 - Train Epoch 037 | Step 015 | Loss 1.2598 | Elasped 0:07:32 | ETA 0:02:40
+2023-10-16 12:31:43,789 - Train Epoch 037 | Step 016 | Loss 1.6821 | Elasped 0:07:33 | ETA 0:02:40
+2023-10-16 12:31:44,407 - Train Epoch 037 | Step 017 | Loss 0.8555 | Elasped 0:07:33 | ETA 0:02:39
+2023-10-16 12:31:44,975 - Train Epoch 038 | Step 000 | Loss 1.2207 | Elasped 0:07:34 | ETA 0:02:38
+2023-10-16 12:31:45,620 - Train Epoch 038 | Step 001 | Loss 1.1847 | Elasped 0:07:34 | ETA 0:02:37
+2023-10-16 12:31:46,239 - Train Epoch 038 | Step 002 | Loss 1.0639 | Elasped 0:07:35 | ETA 0:02:37
+2023-10-16 12:31:46,845 - Train Epoch 038 | Step 003 | Loss 1.2813 | Elasped 0:07:36 | ETA 0:02:36
+2023-10-16 12:31:47,515 - Train Epoch 038 | Step 004 | Loss 1.4257 | Elasped 0:07:36 | ETA 0:02:35
+2023-10-16 12:31:48,115 - Train Epoch 038 | Step 005 | Loss 0.4269 | Elasped 0:07:37 | ETA 0:02:35
+2023-10-16 12:31:48,724 - Train Epoch 038 | Step 006 | Loss 1.4373 | Elasped 0:07:37 | ETA 0:02:34
+2023-10-16 12:31:49,405 - Train Epoch 038 | Step 007 | Loss 1.1188 | Elasped 0:07:38 | ETA 0:02:33
+2023-10-16 12:31:50,024 - Train Epoch 038 | Step 008 | Loss 0.7040 | Elasped 0:07:39 | ETA 0:02:33
+2023-10-16 12:31:50,681 - Train Epoch 038 | Step 009 | Loss 0.9456 | Elasped 0:07:39 | ETA 0:02:32
+2023-10-16 12:31:51,267 - Train Epoch 038 | Step 010 | Loss 1.2090 | Elasped 0:07:40 | ETA 0:02:31
+2023-10-16 12:31:51,849 - Train Epoch 038 | Step 011 | Loss 1.0314 | Elasped 0:07:41 | ETA 0:02:30
+2023-10-16 12:31:52,511 - Train Epoch 038 | Step 012 | Loss 1.0510 | Elasped 0:07:41 | ETA 0:02:30
+2023-10-16 12:31:53,097 - Train Epoch 038 | Step 013 | Loss 0.9984 | Elasped 0:07:42 | ETA 0:02:29
+2023-10-16 12:31:53,715 - Train Epoch 038 | Step 014 | Loss 0.9825 | Elasped 0:07:42 | ETA 0:02:28
+2023-10-16 12:31:54,416 - Train Epoch 038 | Step 015 | Loss 1.2503 | Elasped 0:07:43 | ETA 0:02:28
+2023-10-16 12:31:55,080 - Train Epoch 038 | Step 016 | Loss 1.0184 | Elasped 0:07:44 | ETA 0:02:27
+2023-10-16 12:31:55,719 - Train Epoch 038 | Step 017 | Loss 0.2495 | Elasped 0:07:44 | ETA 0:02:26
+2023-10-16 12:31:56,432 - Train Epoch 039 | Step 000 | Loss 1.0835 | Elasped 0:07:45 | ETA 0:02:26
+2023-10-16 12:31:57,109 - Train Epoch 039 | Step 001 | Loss 1.1246 | Elasped 0:07:46 | ETA 0:02:25
+2023-10-16 12:31:57,725 - Train Epoch 039 | Step 002 | Loss 1.0234 | Elasped 0:07:46 | ETA 0:02:24
+2023-10-16 12:31:58,317 - Train Epoch 039 | Step 003 | Loss 1.0665 | Elasped 0:07:47 | ETA 0:02:24
+2023-10-16 12:31:58,943 - Train Epoch 039 | Step 004 | Loss 1.1114 | Elasped 0:07:48 | ETA 0:02:23
+2023-10-16 12:31:59,577 - Train Epoch 039 | Step 005 | Loss 1.0351 | Elasped 0:07:48 | ETA 0:02:22
+2023-10-16 12:32:00,181 - Train Epoch 039 | Step 006 | Loss 0.6615 | Elasped 0:07:49 | ETA 0:02:21
+2023-10-16 12:32:00,789 - Train Epoch 039 | Step 007 | Loss 0.9317 | Elasped 0:07:50 | ETA 0:02:21
+2023-10-16 12:32:01,419 - Train Epoch 039 | Step 008 | Loss 0.7118 | Elasped 0:07:50 | ETA 0:02:20
+2023-10-16 12:32:02,020 - Train Epoch 039 | Step 009 | Loss 0.9961 | Elasped 0:07:51 | ETA 0:02:19
+2023-10-16 12:32:02,609 - Train Epoch 039 | Step 010 | Loss 0.7150 | Elasped 0:07:51 | ETA 0:02:19
+2023-10-16 12:32:03,256 - Train Epoch 039 | Step 011 | Loss 1.0310 | Elasped 0:07:52 | ETA 0:02:18
+2023-10-16 12:32:03,864 - Train Epoch 039 | Step 012 | Loss 1.0839 | Elasped 0:07:53 | ETA 0:02:17
+2023-10-16 12:32:04,558 - Train Epoch 039 | Step 013 | Loss 0.8050 | Elasped 0:07:53 | ETA 0:02:17
+2023-10-16 12:32:05,250 - Train Epoch 039 | Step 014 | Loss 0.9494 | Elasped 0:07:54 | ETA 0:02:16
+2023-10-16 12:32:05,843 - Train Epoch 039 | Step 015 | Loss 0.4738 | Elasped 0:07:55 | ETA 0:02:15
+2023-10-16 12:32:06,456 - Train Epoch 039 | Step 016 | Loss 0.8536 | Elasped 0:07:55 | ETA 0:02:15
+2023-10-16 12:32:07,084 - Train Epoch 039 | Step 017 | Loss 0.8793 | Elasped 0:07:56 | ETA 0:02:14
+2023-10-16 12:32:07,672 - Train Epoch 040 | Step 000 | Loss 0.7712 | Elasped 0:07:56 | ETA 0:02:13
+2023-10-16 12:32:08,342 - Train Epoch 040 | Step 001 | Loss 1.1145 | Elasped 0:07:57 | ETA 0:02:12
+2023-10-16 12:32:08,938 - Train Epoch 040 | Step 002 | Loss 0.9492 | Elasped 0:07:58 | ETA 0:02:12
+2023-10-16 12:32:09,595 - Train Epoch 040 | Step 003 | Loss 0.7560 | Elasped 0:07:58 | ETA 0:02:11
+2023-10-16 12:32:10,249 - Train Epoch 040 | Step 004 | Loss 1.0647 | Elasped 0:07:59 | ETA 0:02:10
+2023-10-16 12:32:10,848 - Train Epoch 040 | Step 005 | Loss 0.8893 | Elasped 0:08:00 | ETA 0:02:10
+2023-10-16 12:32:11,465 - Train Epoch 040 | Step 006 | Loss 0.6088 | Elasped 0:08:00 | ETA 0:02:09
+2023-10-16 12:32:12,161 - Train Epoch 040 | Step 007 | Loss 1.0337 | Elasped 0:08:01 | ETA 0:02:08
+2023-10-16 12:32:12,751 - Train Epoch 040 | Step 008 | Loss 0.8491 | Elasped 0:08:01 | ETA 0:02:08
+2023-10-16 12:32:13,382 - Train Epoch 040 | Step 009 | Loss 0.4947 | Elasped 0:08:02 | ETA 0:02:07
+2023-10-16 12:32:14,081 - Train Epoch 040 | Step 010 | Loss 0.7172 | Elasped 0:08:03 | ETA 0:02:06
+2023-10-16 12:32:14,730 - Train Epoch 040 | Step 011 | Loss 0.7454 | Elasped 0:08:03 | ETA 0:02:06
+2023-10-16 12:32:15,344 - Train Epoch 040 | Step 012 | Loss 0.7246 | Elasped 0:08:04 | ETA 0:02:05
+2023-10-16 12:32:16,016 - Train Epoch 040 | Step 013 | Loss 0.7373 | Elasped 0:08:05 | ETA 0:02:04
+2023-10-16 12:32:16,586 - Train Epoch 040 | Step 014 | Loss 0.7634 | Elasped 0:08:05 | ETA 0:02:03
+2023-10-16 12:32:17,239 - Train Epoch 040 | Step 015 | Loss 0.8599 | Elasped 0:08:06 | ETA 0:02:03
+2023-10-16 12:32:17,895 - Train Epoch 040 | Step 016 | Loss 0.9424 | Elasped 0:08:07 | ETA 0:02:02
+2023-10-16 12:32:18,479 - Train Epoch 040 | Step 017 | Loss 0.8523 | Elasped 0:08:07 | ETA 0:02:01
+2023-10-16 12:32:19,683 -  Test Epoch 040 | BIL-backbone | KNN Acc: 72.31% | Best Acc 76.45% at epoch 35 
+2023-10-16 12:32:20,591 -  Test Epoch 040 | JM-backbone | KNN Acc: 54.67% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:32:21,210 -  Test Epoch 040 | ACT-backbone | KNN Acc: 50.53% | Best Acc 54.74% at epoch 25 
+2023-10-16 12:32:22,389 -  Test Epoch 040 | BIL-full | KNN Acc: 72.31% | Best Acc 75.62% at epoch 30 
+2023-10-16 12:32:23,280 -  Test Epoch 040 | JM-full | KNN Acc: 58.67% | Best Acc 62.67% at epoch 35 
+2023-10-16 12:32:23,898 -  Test Epoch 040 | ACT-full | KNN Acc: 52.63% | Best Acc 56.84% at epoch 30 
+2023-10-16 12:32:24,551 - Train Epoch 041 | Step 000 | Loss 0.3253 | Elasped 0:08:13 | ETA 0:02:02
+2023-10-16 12:32:25,154 - Train Epoch 041 | Step 001 | Loss 1.0529 | Elasped 0:08:14 | ETA 0:02:01
+2023-10-16 12:32:25,772 - Train Epoch 041 | Step 002 | Loss 0.8505 | Elasped 0:08:15 | ETA 0:02:01
+2023-10-16 12:32:26,487 - Train Epoch 041 | Step 003 | Loss 0.3063 | Elasped 0:08:15 | ETA 0:02:00
+2023-10-16 12:32:27,155 - Train Epoch 041 | Step 004 | Loss 0.8570 | Elasped 0:08:16 | ETA 0:01:59
+2023-10-16 12:32:27,785 - Train Epoch 041 | Step 005 | Loss 0.9158 | Elasped 0:08:17 | ETA 0:01:59
+2023-10-16 12:32:28,442 - Train Epoch 041 | Step 006 | Loss 0.9405 | Elasped 0:08:17 | ETA 0:01:58
+2023-10-16 12:32:29,045 - Train Epoch 041 | Step 007 | Loss 0.7073 | Elasped 0:08:18 | ETA 0:01:57
+2023-10-16 12:32:29,649 - Train Epoch 041 | Step 008 | Loss 0.7515 | Elasped 0:08:18 | ETA 0:01:57
+2023-10-16 12:32:30,362 - Train Epoch 041 | Step 009 | Loss 0.8568 | Elasped 0:08:19 | ETA 0:01:56
+2023-10-16 12:32:30,974 - Train Epoch 041 | Step 010 | Loss 0.6418 | Elasped 0:08:20 | ETA 0:01:55
+2023-10-16 12:32:31,642 - Train Epoch 041 | Step 011 | Loss 0.6490 | Elasped 0:08:20 | ETA 0:01:54
+2023-10-16 12:32:32,348 - Train Epoch 041 | Step 012 | Loss 0.9138 | Elasped 0:08:21 | ETA 0:01:54
+2023-10-16 12:32:32,901 - Train Epoch 041 | Step 013 | Loss 0.9325 | Elasped 0:08:22 | ETA 0:01:53
+2023-10-16 12:32:33,548 - Train Epoch 041 | Step 014 | Loss 0.7144 | Elasped 0:08:22 | ETA 0:01:52
+2023-10-16 12:32:34,191 - Train Epoch 041 | Step 015 | Loss 0.7136 | Elasped 0:08:23 | ETA 0:01:52
+2023-10-16 12:32:34,843 - Train Epoch 041 | Step 016 | Loss 0.8532 | Elasped 0:08:24 | ETA 0:01:51
+2023-10-16 12:32:35,469 - Train Epoch 041 | Step 017 | Loss 0.9490 | Elasped 0:08:24 | ETA 0:01:50
+2023-10-16 12:32:36,156 - Train Epoch 042 | Step 000 | Loss 0.9464 | Elasped 0:08:25 | ETA 0:01:50
+2023-10-16 12:32:36,800 - Train Epoch 042 | Step 001 | Loss 1.0235 | Elasped 0:08:26 | ETA 0:01:49
+2023-10-16 12:32:37,417 - Train Epoch 042 | Step 002 | Loss 0.3605 | Elasped 0:08:26 | ETA 0:01:48
+2023-10-16 12:32:38,025 - Train Epoch 042 | Step 003 | Loss 0.8376 | Elasped 0:08:27 | ETA 0:01:48
+2023-10-16 12:32:38,602 - Train Epoch 042 | Step 004 | Loss 1.0037 | Elasped 0:08:27 | ETA 0:01:47
+2023-10-16 12:32:39,281 - Train Epoch 042 | Step 005 | Loss 0.7902 | Elasped 0:08:28 | ETA 0:01:46
+2023-10-16 12:32:39,887 - Train Epoch 042 | Step 006 | Loss 0.7587 | Elasped 0:08:29 | ETA 0:01:45
+2023-10-16 12:32:40,502 - Train Epoch 042 | Step 007 | Loss 0.7967 | Elasped 0:08:29 | ETA 0:01:45
+2023-10-16 12:32:41,182 - Train Epoch 042 | Step 008 | Loss 0.7028 | Elasped 0:08:30 | ETA 0:01:44
+2023-10-16 12:32:41,791 - Train Epoch 042 | Step 009 | Loss 0.5955 | Elasped 0:08:31 | ETA 0:01:43
+2023-10-16 12:32:42,477 - Train Epoch 042 | Step 010 | Loss 0.7697 | Elasped 0:08:31 | ETA 0:01:43
+2023-10-16 12:32:43,096 - Train Epoch 042 | Step 011 | Loss 0.4276 | Elasped 0:08:32 | ETA 0:01:42
+2023-10-16 12:32:43,710 - Train Epoch 042 | Step 012 | Loss 0.9645 | Elasped 0:08:32 | ETA 0:01:41
+2023-10-16 12:32:44,374 - Train Epoch 042 | Step 013 | Loss 0.9945 | Elasped 0:08:33 | ETA 0:01:41
+2023-10-16 12:32:44,989 - Train Epoch 042 | Step 014 | Loss 0.9411 | Elasped 0:08:34 | ETA 0:01:40
+2023-10-16 12:32:45,579 - Train Epoch 042 | Step 015 | Loss 0.9526 | Elasped 0:08:34 | ETA 0:01:39
+2023-10-16 12:32:46,232 - Train Epoch 042 | Step 016 | Loss 0.8636 | Elasped 0:08:35 | ETA 0:01:38
+2023-10-16 12:32:46,833 - Train Epoch 042 | Step 017 | Loss 1.0048 | Elasped 0:08:36 | ETA 0:01:38
+2023-10-16 12:32:47,431 - Train Epoch 043 | Step 000 | Loss 0.3730 | Elasped 0:08:36 | ETA 0:01:37
+2023-10-16 12:32:48,101 - Train Epoch 043 | Step 001 | Loss 0.5448 | Elasped 0:08:37 | ETA 0:01:36
+2023-10-16 12:32:48,756 - Train Epoch 043 | Step 002 | Loss 1.2014 | Elasped 0:08:37 | ETA 0:01:36
+2023-10-16 12:32:49,416 - Train Epoch 043 | Step 003 | Loss 0.9402 | Elasped 0:08:38 | ETA 0:01:35
+2023-10-16 12:32:50,004 - Train Epoch 043 | Step 004 | Loss 0.8736 | Elasped 0:08:39 | ETA 0:01:34
+2023-10-16 12:32:50,585 - Train Epoch 043 | Step 005 | Loss 0.8771 | Elasped 0:08:39 | ETA 0:01:34
+2023-10-16 12:32:51,197 - Train Epoch 043 | Step 006 | Loss 0.6041 | Elasped 0:08:40 | ETA 0:01:33
+2023-10-16 12:32:51,825 - Train Epoch 043 | Step 007 | Loss 0.7064 | Elasped 0:08:41 | ETA 0:01:32
+2023-10-16 12:32:52,443 - Train Epoch 043 | Step 008 | Loss 0.8259 | Elasped 0:08:41 | ETA 0:01:32
+2023-10-16 12:32:53,085 - Train Epoch 043 | Step 009 | Loss 0.6958 | Elasped 0:08:42 | ETA 0:01:31
+2023-10-16 12:32:53,710 - Train Epoch 043 | Step 010 | Loss 0.6012 | Elasped 0:08:42 | ETA 0:01:30
+2023-10-16 12:32:54,337 - Train Epoch 043 | Step 011 | Loss 0.9105 | Elasped 0:08:43 | ETA 0:01:29
+2023-10-16 12:32:55,063 - Train Epoch 043 | Step 012 | Loss 1.1141 | Elasped 0:08:44 | ETA 0:01:29
+2023-10-16 12:32:55,651 - Train Epoch 043 | Step 013 | Loss 0.5429 | Elasped 0:08:44 | ETA 0:01:28
+2023-10-16 12:32:56,258 - Train Epoch 043 | Step 014 | Loss 0.7328 | Elasped 0:08:45 | ETA 0:01:27
+2023-10-16 12:32:56,917 - Train Epoch 043 | Step 015 | Loss 0.8665 | Elasped 0:08:46 | ETA 0:01:27
+2023-10-16 12:32:57,557 - Train Epoch 043 | Step 016 | Loss 0.9041 | Elasped 0:08:46 | ETA 0:01:26
+2023-10-16 12:32:58,193 - Train Epoch 043 | Step 017 | Loss 0.8710 | Elasped 0:08:47 | ETA 0:01:25
+2023-10-16 12:32:58,794 - Train Epoch 044 | Step 000 | Loss 1.0488 | Elasped 0:08:48 | ETA 0:01:25
+2023-10-16 12:32:59,414 - Train Epoch 044 | Step 001 | Loss 0.6701 | Elasped 0:08:48 | ETA 0:01:24
+2023-10-16 12:33:00,084 - Train Epoch 044 | Step 002 | Loss 1.0631 | Elasped 0:08:49 | ETA 0:01:23
+2023-10-16 12:33:00,666 - Train Epoch 044 | Step 003 | Loss 0.7578 | Elasped 0:08:49 | ETA 0:01:23
+2023-10-16 12:33:01,275 - Train Epoch 044 | Step 004 | Loss 1.0164 | Elasped 0:08:50 | ETA 0:01:22
+2023-10-16 12:33:01,950 - Train Epoch 044 | Step 005 | Loss 0.4378 | Elasped 0:08:51 | ETA 0:01:21
+2023-10-16 12:33:02,528 - Train Epoch 044 | Step 006 | Loss 0.6642 | Elasped 0:08:51 | ETA 0:01:21
+2023-10-16 12:33:03,254 - Train Epoch 044 | Step 007 | Loss 0.7458 | Elasped 0:08:52 | ETA 0:01:20
+2023-10-16 12:33:03,829 - Train Epoch 044 | Step 008 | Loss 0.7272 | Elasped 0:08:53 | ETA 0:01:19
+2023-10-16 12:33:04,410 - Train Epoch 044 | Step 009 | Loss 0.8290 | Elasped 0:08:53 | ETA 0:01:18
+2023-10-16 12:33:05,087 - Train Epoch 044 | Step 010 | Loss 0.7199 | Elasped 0:08:54 | ETA 0:01:18
+2023-10-16 12:33:05,685 - Train Epoch 044 | Step 011 | Loss 0.7495 | Elasped 0:08:54 | ETA 0:01:17
+2023-10-16 12:33:06,299 - Train Epoch 044 | Step 012 | Loss 0.5596 | Elasped 0:08:55 | ETA 0:01:16
+2023-10-16 12:33:07,011 - Train Epoch 044 | Step 013 | Loss 0.8262 | Elasped 0:08:56 | ETA 0:01:16
+2023-10-16 12:33:07,658 - Train Epoch 044 | Step 014 | Loss 0.9216 | Elasped 0:08:56 | ETA 0:01:15
+2023-10-16 12:33:08,277 - Train Epoch 044 | Step 015 | Loss 0.9769 | Elasped 0:08:57 | ETA 0:01:14
+2023-10-16 12:33:08,956 - Train Epoch 044 | Step 016 | Loss 0.8606 | Elasped 0:08:58 | ETA 0:01:14
+2023-10-16 12:33:09,556 - Train Epoch 044 | Step 017 | Loss 0.3493 | Elasped 0:08:58 | ETA 0:01:13
+2023-10-16 12:33:10,178 - Train Epoch 045 | Step 000 | Loss 1.0361 | Elasped 0:08:59 | ETA 0:01:12
+2023-10-16 12:33:10,877 - Train Epoch 045 | Step 001 | Loss 0.9896 | Elasped 0:09:00 | ETA 0:01:12
+2023-10-16 12:33:11,451 - Train Epoch 045 | Step 002 | Loss 0.6691 | Elasped 0:09:00 | ETA 0:01:11
+2023-10-16 12:33:12,059 - Train Epoch 045 | Step 003 | Loss 0.7685 | Elasped 0:09:01 | ETA 0:01:10
+2023-10-16 12:33:12,792 - Train Epoch 045 | Step 004 | Loss 0.2777 | Elasped 0:09:02 | ETA 0:01:10
+2023-10-16 12:33:13,387 - Train Epoch 045 | Step 005 | Loss 0.8515 | Elasped 0:09:02 | ETA 0:01:09
+2023-10-16 12:33:14,080 - Train Epoch 045 | Step 006 | Loss 0.7541 | Elasped 0:09:03 | ETA 0:01:08
+2023-10-16 12:33:14,717 - Train Epoch 045 | Step 007 | Loss 0.6055 | Elasped 0:09:03 | ETA 0:01:07
+2023-10-16 12:33:15,309 - Train Epoch 045 | Step 008 | Loss 0.6862 | Elasped 0:09:04 | ETA 0:01:07
+2023-10-16 12:33:15,988 - Train Epoch 045 | Step 009 | Loss 0.7180 | Elasped 0:09:05 | ETA 0:01:06
+2023-10-16 12:33:16,553 - Train Epoch 045 | Step 010 | Loss 0.5986 | Elasped 0:09:05 | ETA 0:01:05
+2023-10-16 12:33:17,159 - Train Epoch 045 | Step 011 | Loss 0.6672 | Elasped 0:09:06 | ETA 0:01:05
+2023-10-16 12:33:17,821 - Train Epoch 045 | Step 012 | Loss 0.8632 | Elasped 0:09:07 | ETA 0:01:04
+2023-10-16 12:33:18,455 - Train Epoch 045 | Step 013 | Loss 0.8401 | Elasped 0:09:07 | ETA 0:01:03
+2023-10-16 12:33:19,018 - Train Epoch 045 | Step 014 | Loss 0.9299 | Elasped 0:09:08 | ETA 0:01:03
+2023-10-16 12:33:19,601 - Train Epoch 045 | Step 015 | Loss 0.8469 | Elasped 0:09:08 | ETA 0:01:02
+2023-10-16 12:33:20,282 - Train Epoch 045 | Step 016 | Loss 0.8819 | Elasped 0:09:09 | ETA 0:01:01
+2023-10-16 12:33:20,915 - Train Epoch 045 | Step 017 | Loss 0.9373 | Elasped 0:09:10 | ETA 0:01:01
+2023-10-16 12:33:22,098 -  Test Epoch 045 | BIL-backbone | KNN Acc: 72.73% | Best Acc 76.45% at epoch 35 
+2023-10-16 12:33:22,988 -  Test Epoch 045 | JM-backbone | KNN Acc: 57.33% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:33:23,612 -  Test Epoch 045 | ACT-backbone | KNN Acc: 48.42% | Best Acc 54.74% at epoch 25 
+2023-10-16 12:33:24,803 -  Test Epoch 045 | BIL-full | KNN Acc: 73.14% | Best Acc 75.62% at epoch 30 
+2023-10-16 12:33:25,710 -  Test Epoch 045 | JM-full | KNN Acc: 61.33% | Best Acc 62.67% at epoch 35 
+2023-10-16 12:33:26,340 -  Test Epoch 045 | ACT-full | KNN Acc: 50.53% | Best Acc 56.84% at epoch 30 
+2023-10-16 12:33:27,006 - Train Epoch 046 | Step 000 | Loss 0.1605 | Elasped 0:09:16 | ETA 0:01:01
+2023-10-16 12:33:27,606 - Train Epoch 046 | Step 001 | Loss 0.3840 | Elasped 0:09:16 | ETA 0:01:00
+2023-10-16 12:33:28,268 - Train Epoch 046 | Step 002 | Loss 0.9016 | Elasped 0:09:17 | ETA 0:00:59
+2023-10-16 12:33:28,894 - Train Epoch 046 | Step 003 | Loss 0.5795 | Elasped 0:09:18 | ETA 0:00:58
+2023-10-16 12:33:29,524 - Train Epoch 046 | Step 004 | Loss 0.9182 | Elasped 0:09:18 | ETA 0:00:58
+2023-10-16 12:33:30,111 - Train Epoch 046 | Step 005 | Loss 0.7179 | Elasped 0:09:19 | ETA 0:00:57
+2023-10-16 12:33:30,764 - Train Epoch 046 | Step 006 | Loss 0.6466 | Elasped 0:09:19 | ETA 0:00:56
+2023-10-16 12:33:31,376 - Train Epoch 046 | Step 007 | Loss 0.8079 | Elasped 0:09:20 | ETA 0:00:56
+2023-10-16 12:33:32,004 - Train Epoch 046 | Step 008 | Loss 0.7772 | Elasped 0:09:21 | ETA 0:00:55
+2023-10-16 12:33:32,719 - Train Epoch 046 | Step 009 | Loss 0.1734 | Elasped 0:09:21 | ETA 0:00:54
+2023-10-16 12:33:33,348 - Train Epoch 046 | Step 010 | Loss 0.8071 | Elasped 0:09:22 | ETA 0:00:54
+2023-10-16 12:33:34,010 - Train Epoch 046 | Step 011 | Loss 0.7283 | Elasped 0:09:23 | ETA 0:00:53
+2023-10-16 12:33:34,620 - Train Epoch 046 | Step 012 | Loss 0.9021 | Elasped 0:09:23 | ETA 0:00:52
+2023-10-16 12:33:35,202 - Train Epoch 046 | Step 013 | Loss 0.7375 | Elasped 0:09:24 | ETA 0:00:52
+2023-10-16 12:33:35,888 - Train Epoch 046 | Step 014 | Loss 0.8463 | Elasped 0:09:25 | ETA 0:00:51
+2023-10-16 12:33:36,477 - Train Epoch 046 | Step 015 | Loss 0.8123 | Elasped 0:09:25 | ETA 0:00:50
+2023-10-16 12:33:37,103 - Train Epoch 046 | Step 016 | Loss 0.7203 | Elasped 0:09:26 | ETA 0:00:49
+2023-10-16 12:33:37,740 - Train Epoch 046 | Step 017 | Loss 0.8274 | Elasped 0:09:26 | ETA 0:00:49
+2023-10-16 12:33:38,352 - Train Epoch 047 | Step 000 | Loss 0.3715 | Elasped 0:09:27 | ETA 0:00:48
+2023-10-16 12:33:38,938 - Train Epoch 047 | Step 001 | Loss 0.9857 | Elasped 0:09:28 | ETA 0:00:47
+2023-10-16 12:33:39,585 - Train Epoch 047 | Step 002 | Loss 0.3500 | Elasped 0:09:28 | ETA 0:00:47
+2023-10-16 12:33:40,238 - Train Epoch 047 | Step 003 | Loss 0.8940 | Elasped 0:09:29 | ETA 0:00:46
+2023-10-16 12:33:40,815 - Train Epoch 047 | Step 004 | Loss 0.7441 | Elasped 0:09:30 | ETA 0:00:45
+2023-10-16 12:33:41,440 - Train Epoch 047 | Step 005 | Loss 0.8754 | Elasped 0:09:30 | ETA 0:00:45
+2023-10-16 12:33:42,095 - Train Epoch 047 | Step 006 | Loss 0.7401 | Elasped 0:09:31 | ETA 0:00:44
+2023-10-16 12:33:42,770 - Train Epoch 047 | Step 007 | Loss 0.7227 | Elasped 0:09:32 | ETA 0:00:43
+2023-10-16 12:33:43,351 - Train Epoch 047 | Step 008 | Loss 0.2037 | Elasped 0:09:32 | ETA 0:00:43
+2023-10-16 12:33:43,976 - Train Epoch 047 | Step 009 | Loss 0.8142 | Elasped 0:09:33 | ETA 0:00:42
+2023-10-16 12:33:44,613 - Train Epoch 047 | Step 010 | Loss 0.7000 | Elasped 0:09:33 | ETA 0:00:41
+2023-10-16 12:33:45,196 - Train Epoch 047 | Step 011 | Loss 0.6044 | Elasped 0:09:34 | ETA 0:00:41
+2023-10-16 12:33:45,786 - Train Epoch 047 | Step 012 | Loss 0.7316 | Elasped 0:09:35 | ETA 0:00:40
+2023-10-16 12:33:46,485 - Train Epoch 047 | Step 013 | Loss 0.5396 | Elasped 0:09:35 | ETA 0:00:39
+2023-10-16 12:33:47,090 - Train Epoch 047 | Step 014 | Loss 0.7566 | Elasped 0:09:36 | ETA 0:00:38
+2023-10-16 12:33:47,702 - Train Epoch 047 | Step 015 | Loss 0.8053 | Elasped 0:09:36 | ETA 0:00:38
+2023-10-16 12:33:48,367 - Train Epoch 047 | Step 016 | Loss 0.7548 | Elasped 0:09:37 | ETA 0:00:37
+2023-10-16 12:33:48,980 - Train Epoch 047 | Step 017 | Loss 0.8766 | Elasped 0:09:38 | ETA 0:00:36
+2023-10-16 12:33:49,633 - Train Epoch 048 | Step 000 | Loss 0.1610 | Elasped 0:09:38 | ETA 0:00:36
+2023-10-16 12:33:50,268 - Train Epoch 048 | Step 001 | Loss 0.7206 | Elasped 0:09:39 | ETA 0:00:35
+2023-10-16 12:33:50,827 - Train Epoch 048 | Step 002 | Loss 0.8557 | Elasped 0:09:40 | ETA 0:00:34
+2023-10-16 12:33:51,510 - Train Epoch 048 | Step 003 | Loss 0.3406 | Elasped 0:09:40 | ETA 0:00:34
+2023-10-16 12:33:52,137 - Train Epoch 048 | Step 004 | Loss 0.9147 | Elasped 0:09:41 | ETA 0:00:33
+2023-10-16 12:33:52,720 - Train Epoch 048 | Step 005 | Loss 0.5336 | Elasped 0:09:41 | ETA 0:00:32
+2023-10-16 12:33:53,357 - Train Epoch 048 | Step 006 | Loss 0.8180 | Elasped 0:09:42 | ETA 0:00:32
+2023-10-16 12:33:53,948 - Train Epoch 048 | Step 007 | Loss 0.8362 | Elasped 0:09:43 | ETA 0:00:31
+2023-10-16 12:33:54,574 - Train Epoch 048 | Step 008 | Loss 0.3916 | Elasped 0:09:43 | ETA 0:00:30
+2023-10-16 12:33:55,198 - Train Epoch 048 | Step 009 | Loss 0.7786 | Elasped 0:09:44 | ETA 0:00:30
+2023-10-16 12:33:55,811 - Train Epoch 048 | Step 010 | Loss 0.7941 | Elasped 0:09:45 | ETA 0:00:29
+2023-10-16 12:33:56,431 - Train Epoch 048 | Step 011 | Loss 0.7267 | Elasped 0:09:45 | ETA 0:00:28
+2023-10-16 12:33:57,096 - Train Epoch 048 | Step 012 | Loss 0.7758 | Elasped 0:09:46 | ETA 0:00:27
+2023-10-16 12:33:57,680 - Train Epoch 048 | Step 013 | Loss 0.7732 | Elasped 0:09:46 | ETA 0:00:27
+2023-10-16 12:33:58,333 - Train Epoch 048 | Step 014 | Loss 0.6069 | Elasped 0:09:47 | ETA 0:00:26
+2023-10-16 12:33:58,935 - Train Epoch 048 | Step 015 | Loss 0.5913 | Elasped 0:09:48 | ETA 0:00:25
+2023-10-16 12:33:59,563 - Train Epoch 048 | Step 016 | Loss 0.6647 | Elasped 0:09:48 | ETA 0:00:25
+2023-10-16 12:34:00,181 - Train Epoch 048 | Step 017 | Loss 0.5111 | Elasped 0:09:49 | ETA 0:00:24
+2023-10-16 12:34:00,771 - Train Epoch 049 | Step 000 | Loss 0.4841 | Elasped 0:09:50 | ETA 0:00:23
+2023-10-16 12:34:01,382 - Train Epoch 049 | Step 001 | Loss 0.7718 | Elasped 0:09:50 | ETA 0:00:23
+2023-10-16 12:34:02,005 - Train Epoch 049 | Step 002 | Loss 0.7574 | Elasped 0:09:51 | ETA 0:00:22
+2023-10-16 12:34:02,598 - Train Epoch 049 | Step 003 | Loss 0.5606 | Elasped 0:09:51 | ETA 0:00:21
+2023-10-16 12:34:03,220 - Train Epoch 049 | Step 004 | Loss 0.6624 | Elasped 0:09:52 | ETA 0:00:21
+2023-10-16 12:34:03,847 - Train Epoch 049 | Step 005 | Loss 0.5564 | Elasped 0:09:53 | ETA 0:00:20
+2023-10-16 12:34:04,446 - Train Epoch 049 | Step 006 | Loss 0.6985 | Elasped 0:09:53 | ETA 0:00:19
+2023-10-16 12:34:05,060 - Train Epoch 049 | Step 007 | Loss 0.2195 | Elasped 0:09:54 | ETA 0:00:19
+2023-10-16 12:34:05,703 - Train Epoch 049 | Step 008 | Loss 0.5698 | Elasped 0:09:54 | ETA 0:00:18
+2023-10-16 12:34:06,324 - Train Epoch 049 | Step 009 | Loss 0.6222 | Elasped 0:09:55 | ETA 0:00:17
+2023-10-16 12:34:06,993 - Train Epoch 049 | Step 010 | Loss 0.6267 | Elasped 0:09:56 | ETA 0:00:17
+2023-10-16 12:34:07,584 - Train Epoch 049 | Step 011 | Loss 0.7609 | Elasped 0:09:56 | ETA 0:00:16
+2023-10-16 12:34:08,171 - Train Epoch 049 | Step 012 | Loss 0.6463 | Elasped 0:09:57 | ETA 0:00:15
+2023-10-16 12:34:08,859 - Train Epoch 049 | Step 013 | Loss 0.6242 | Elasped 0:09:58 | ETA 0:00:14
+2023-10-16 12:34:09,477 - Train Epoch 049 | Step 014 | Loss 0.3821 | Elasped 0:09:58 | ETA 0:00:14
+2023-10-16 12:34:10,117 - Train Epoch 049 | Step 015 | Loss 0.5080 | Elasped 0:09:59 | ETA 0:00:13
+2023-10-16 12:34:10,760 - Train Epoch 049 | Step 016 | Loss 0.7863 | Elasped 0:09:59 | ETA 0:00:12
+2023-10-16 12:34:11,361 - Train Epoch 049 | Step 017 | Loss 0.7017 | Elasped 0:10:00 | ETA 0:00:12
+2023-10-16 12:34:11,966 - Train Epoch 050 | Step 000 | Loss 0.8947 | Elasped 0:10:01 | ETA 0:00:11
+2023-10-16 12:34:12,614 - Train Epoch 050 | Step 001 | Loss 0.6540 | Elasped 0:10:01 | ETA 0:00:10
+2023-10-16 12:34:13,153 - Train Epoch 050 | Step 002 | Loss 0.8623 | Elasped 0:10:02 | ETA 0:00:10
+2023-10-16 12:34:13,755 - Train Epoch 050 | Step 003 | Loss 0.3774 | Elasped 0:10:02 | ETA 0:00:09
+2023-10-16 12:34:14,485 - Train Epoch 050 | Step 004 | Loss 0.4518 | Elasped 0:10:03 | ETA 0:00:08
+2023-10-16 12:34:15,103 - Train Epoch 050 | Step 005 | Loss 0.7700 | Elasped 0:10:04 | ETA 0:00:08
+2023-10-16 12:34:15,712 - Train Epoch 050 | Step 006 | Loss 0.8518 | Elasped 0:10:04 | ETA 0:00:07
+2023-10-16 12:34:16,436 - Train Epoch 050 | Step 007 | Loss 0.4660 | Elasped 0:10:05 | ETA 0:00:06
+2023-10-16 12:34:17,040 - Train Epoch 050 | Step 008 | Loss 0.6213 | Elasped 0:10:06 | ETA 0:00:06
+2023-10-16 12:34:17,686 - Train Epoch 050 | Step 009 | Loss 0.5657 | Elasped 0:10:06 | ETA 0:00:05
+2023-10-16 12:34:18,273 - Train Epoch 050 | Step 010 | Loss 0.6569 | Elasped 0:10:07 | ETA 0:00:04
+2023-10-16 12:34:18,911 - Train Epoch 050 | Step 011 | Loss 0.6678 | Elasped 0:10:08 | ETA 0:00:04
+2023-10-16 12:34:19,514 - Train Epoch 050 | Step 012 | Loss 0.3966 | Elasped 0:10:08 | ETA 0:00:03
+2023-10-16 12:34:20,111 - Train Epoch 050 | Step 013 | Loss 0.5771 | Elasped 0:10:09 | ETA 0:00:02
+2023-10-16 12:34:20,689 - Train Epoch 050 | Step 014 | Loss 0.7882 | Elasped 0:10:09 | ETA 0:00:02
+2023-10-16 12:34:21,362 - Train Epoch 050 | Step 015 | Loss 0.6735 | Elasped 0:10:10 | ETA 0:00:01
+2023-10-16 12:34:21,965 - Train Epoch 050 | Step 016 | Loss 0.7811 | Elasped 0:10:11 | ETA 0:00:00
+2023-10-16 12:34:22,564 - Train Epoch 050 | Step 017 | Loss 0.5665 | Elasped 0:10:11 | ETA 
+2023-10-16 12:34:23,734 -  Test Epoch 050 | BIL-backbone | KNN Acc: 72.73% | Best Acc 76.45% at epoch 35 
+2023-10-16 12:34:24,621 -  Test Epoch 050 | JM-backbone | KNN Acc: 60.00% | Best Acc 61.33% at epoch 10 
+2023-10-16 12:34:25,245 -  Test Epoch 050 | ACT-backbone | KNN Acc: 47.37% | Best Acc 54.74% at epoch 25 
+2023-10-16 12:34:26,439 -  Test Epoch 050 | BIL-full | KNN Acc: 70.66% | Best Acc 75.62% at epoch 30 
+2023-10-16 12:34:27,336 -  Test Epoch 050 | JM-full | KNN Acc: 62.67% | Best Acc 62.67% at epoch 35 
+2023-10-16 12:34:27,951 -  Test Epoch 050 | ACT-full | KNN Acc: 48.42% | Best Acc 56.84% at epoch 30 
+2023-10-16 12:34:27,961 - saving checkpoint at epoch 50 to ./work_dir/test/epoch_50.pth

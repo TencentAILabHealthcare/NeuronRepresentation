@@ -320,7 +320,7 @@ class RandomScaleFeats(object):
 
 
 class RandomShift(object):
-    def __init__(self, shift=[0.2, 0.2, 0], p=0.5):
+    def __init__(self, shift=[5, 5, 5], p=0.5):
         self.shift = shift
         self.prob = p
 

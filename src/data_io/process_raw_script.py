@@ -40,7 +40,7 @@ class MergeRegionHelper:
 
 
 def get_allen_structure_tree():
-    fname_tree = "../data/info/tree.json"
+    fname_tree = "./data/info/tree.json"
     with open(fname_tree) as fp:
         structure_graph = json.load(fp)
     tree = StructureTree(structure_graph)
@@ -60,7 +60,7 @@ def convert_janelia_json(
     tree = get_allen_structure_tree()
 
     row = defaultdict(list)
-    for fname_json in filelist:
+    for fname_json in tqdm(filelist):
         fname_swc = os.path.join(
             folder_out, os.path.basename(fname_json).replace("json", "swc")
         )
@@ -157,8 +157,8 @@ def filter_axon_and_check(folder_in, folder_out):
 
 
 def summarize_branch(
-    folder_in="/home/hanbo/datasets/neuron_morpho_dendrite/$source/swc_soma0/",
-    folder_out="/home/hanbo/datasets/neuron_morpho_dendrite/$source/eswc_soma0/",
+    folder_in="/home/hanbo/data/dendrite/$source/swc_soma0/",
+    folder_out="/home/hanbo/data/dendrite/$source/eswc_soma0/",
 ):
     """
     summarize and simply neuron branches

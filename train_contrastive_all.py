@@ -2,14 +2,12 @@ import argparse
 import datetime
 import time
 import os
-from cv2 import transform
 from tqdm import tqdm
 import json
 
 import torch
 import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
-from fast_pytorch_kmeans import KMeans
 import aug_utils as transforms
 from utils import save_checkpoint, adjust_learning_rate, get_root_logger, set_seed
 from tree_dataset import (
@@ -101,6 +99,7 @@ if __name__ == "__main__":
         "--exp_name", type=str, default="debug", required=True, help="experiment name"
     )
     parser.add_argument("--dataset", type=str, default="all_wo_others")
+    parser.add_argument("--data_dir", type=str, default="data/raw/bil")
     parser.add_argument("--label_dict", type=str, default="all_wo_others")
     parser.add_argument("--seed", type=int, default=42, help="random seed")
     # Model
@@ -367,6 +366,7 @@ if __name__ == "__main__":
         label_dict=LABEL_DICT["all_wo_others"]
         if args.dataset == "rebuttal"
         else LABEL_DICT[args.dataset],
+        data_dir=args.data_dir,
         topology_transformations=topology_transformations,
         attribute_transformations=feat_augs,
         input_features=args.input_features,
@@ -380,41 +380,43 @@ if __name__ == "__main__":
         drop_last=True,
     )
 
-    seu_memory_data = NeuronTreeDataset(
+    bil_memory_data = NeuronTreeDataset(
         phase="train",
-        dataset="seu_6_classes"
+        dataset="bil_6_classes"
         if not args.use_balanced_memory_data
-        else "seu_6_classes_balanced",
-        label_dict=LABEL_DICT["seu_6_classes"],
+        else "bil_6_classes_balanced",
+        data_dir=args.data_dir,
+        label_dict=LABEL_DICT["bil_6_classes"],
         input_features=args.input_features,
     )
 
-    seu_memory_loader = DataLoader(
-        dataset=seu_memory_data,
+    bil_memory_loader = DataLoader(
+        dataset=bil_memory_data,
         batch_size=args.batch_size,
         collate_fn=get_collate_fn(loader_device),
         shuffle=False,
     )
-    seu_testset = NeuronTreeDataset(
+    bil_testset = NeuronTreeDataset(
         phase="test",
-        dataset="seu_6_classes",
-        label_dict=LABEL_DICT["seu_6_classes"],
+        dataset="bil_6_classes",
+        label_dict=LABEL_DICT["bil_6_classes"],
         input_features=args.input_features,
     )
-    seu_test_loader = DataLoader(
-        dataset=seu_testset,
+    bil_test_loader = DataLoader(
+        dataset=bil_testset,
         batch_size=args.batch_size,
         collate_fn=get_collate_fn(loader_device),
         shuffle=False,
     )
-    memory_loaders = [seu_memory_loader]
-    test_loaders = [seu_test_loader]
-    test_datasets = ["SEU"]
+    memory_loaders = [bil_memory_loader]
+    test_loaders = [bil_test_loader]
+    test_datasets = ["BIL"]
     if args.eval_jm:
         JM_memory_data = NeuronTreeDataset(
             phase="train",
             dataset="JM" if not args.use_balanced_memory_data else "JM_balanced",
             label_dict=LABEL_DICT["JM"],
+            data_dir=args.data_dir,
             input_features=args.input_features,
         )
         JM_memory_loader = DataLoader(
