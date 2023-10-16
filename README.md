@@ -75,7 +75,7 @@ We use three datasets, i.e., the BIL dataset, the JML dataset and the ACT datase
         --eval_jm
 ```
 
-I lost track of the `others` category, sso I removed it from the pre-training dataset. This reduced the number of pre-training samples by 28%, which might lead to results slightly different from those in the paper. See `work_dir/test/train_20231016_122408.log` for the reproduced training log.
+I lost track of the `others` category, so I removed it from the pre-training dataset. This reduced the number of pre-training samples by 28%, which might lead to results slightly different from those in the paper. See `work_dir/test/train_20231016_122408.log` for the reproduced training log.
 
 Comparison of frozen KNN accuracy:
 
